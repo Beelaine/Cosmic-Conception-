@@ -1,0 +1,3243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; max-width: 100%; }
+html { overflow-x: hidden; }
+body {
+  font-family: Georgia, serif;
+  background: linear-gradient(160deg, #1A2A4A 0%, #1E3358 40%, #162440 70%, #1A2A4A 100%);
+  color: #F0D878;
+  min-height: 100vh;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* ── ALL SCREENS ── */
+.screen { display: none; min-height: 100vh; background: transparent; position: relative; z-index: 1; }
+.screen.on { display: block; }
+#land { display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px 0 50px; min-height: 100vh; background: transparent; position: relative; z-index: 1; width: 100%; }
+#land.on { display: flex !important; }
+#load { display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 24px; min-height: 100vh; background: transparent; position: relative; z-index: 1; }
+#load.on { display: flex !important; }
+#price.on { display: block !important; padding-bottom: 140px; }
+#form.on { display: block !important; }
+#result.on { display: block !important; }
+#family-screen.on { display: block !important; }
+#family-result.on { display: block !important; }
+
+/* ── CELESTIAL BACKGROUND ── */
+#celestial-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background: linear-gradient(160deg, #1A2A4A 0%, #1E3358 40%, #162440 70%, #1A2A4A 100%);
+}
+#celestial-canvas { display: none; }
+
+/* ── STARS ── */
+#celestial-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  animation: twinkle 4s ease-in-out infinite alternate;
+  background-image:
+    radial-gradient(2px 2px at 10% 8%, rgba(139,105,16,0.95) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 22% 15%, rgba(139,105,16,0.8) 0%, transparent 100%),
+    radial-gradient(2.5px 2.5px at 35% 5%, rgba(184,146,14,0.95) 0%, transparent 100%),
+    radial-gradient(1px 1px at 48% 20%, rgba(139,105,16,0.45) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 60% 10%, rgba(139,105,16,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 72% 6%, rgba(139,105,16,0.5) 0%, transparent 100%),
+    radial-gradient(2px 2px at 85% 18%, rgba(139,105,16,0.55) 0%, transparent 100%),
+    radial-gradient(1px 1px at 92% 8%, rgba(139,105,16,0.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 5% 30%, rgba(139,105,16,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 18% 42%, rgba(139,105,16,0.45) 0%, transparent 100%),
+    radial-gradient(2px 2px at 28% 55%, rgba(139,105,16,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 40% 35%, rgba(139,105,16,0.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 55% 48%, rgba(139,105,16,0.55) 0%, transparent 100%),
+    radial-gradient(1px 1px at 68% 38%, rgba(139,105,16,0.45) 0%, transparent 100%),
+    radial-gradient(2px 2px at 78% 52%, rgba(139,105,16,0.5) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 15% 65%, rgba(139,105,16,0.55) 0%, transparent 100%),
+    radial-gradient(1px 1px at 32% 72%, rgba(139,105,16,0.4) 0%, transparent 100%),
+    radial-gradient(2px 2px at 45% 80%, rgba(139,105,16,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 58% 68%, rgba(139,105,16,0.45) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 70% 78%, rgba(139,105,16,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 82% 65%, rgba(139,105,16,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 8% 85%, rgba(139,105,16,0.45) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 25% 90%, rgba(139,105,16,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 50% 92%, rgba(139,105,16,0.4) 0%, transparent 100%),
+    radial-gradient(2px 2px at 75% 88%, rgba(139,105,16,0.55) 0%, transparent 100%),
+    radial-gradient(1px 1px at 88% 95%, rgba(139,105,16,0.4) 0%, transparent 100%);
+}
+@keyframes twinkle { 0%{opacity:.75} 50%{opacity:1} 100%{opacity:.85} }
+
+#celestial-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background: linear-gradient(160deg, #1A2A4A 0%, #1E3358 40%, #162440 70%, #1A2A4A 100%);
+}
+#celestial-canvas { display: none; }
+
+/* ── TWINKLING STARS ── */
+#celestial-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  animation: twinkle 4s ease-in-out infinite alternate;
+  background-image:
+    radial-gradient(2px 2px at 8% 6%, rgba(255,255,255,0.9) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 15% 22%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(2.5px 2.5px at 25% 8%, rgba(255,255,255,0.85) 0%, transparent 100%),
+    radial-gradient(1px 1px at 32% 35%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(2px 2px at 42% 12%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 50% 28%, rgba(255,255,255,0.65) 0%, transparent 100%),
+    radial-gradient(2px 2px at 58% 7%, rgba(255,255,255,0.75) 0%, transparent 100%),
+    radial-gradient(1px 1px at 65% 20%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(2.5px 2.5px at 72% 14%, rgba(255,255,255,0.88) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 80% 32%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(2px 2px at 88% 9%, rgba(255,255,255,0.82) 0%, transparent 100%),
+    radial-gradient(1px 1px at 94% 25%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(2px 2px at 5% 45%, rgba(255,255,255,0.75) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 12% 58%, rgba(255,255,255,0.65) 0%, transparent 100%),
+    radial-gradient(2.5px 2.5px at 22% 48%, rgba(255,255,255,0.85) 0%, transparent 100%),
+    radial-gradient(1px 1px at 35% 62%, rgba(255,255,255,0.55) 0%, transparent 100%),
+    radial-gradient(2px 2px at 45% 50%, rgba(255,255,255,0.78) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 55% 68%, rgba(255,255,255,0.65) 0%, transparent 100%),
+    radial-gradient(2px 2px at 62% 44%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 58%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(2.5px 2.5px at 78% 46%, rgba(255,255,255,0.88) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 85% 62%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(2px 2px at 92% 50%, rgba(255,255,255,0.75) 0%, transparent 100%),
+    radial-gradient(1px 1px at 10% 75%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(2px 2px at 20% 82%, rgba(255,255,255,0.78) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 30% 70%, rgba(255,255,255,0.65) 0%, transparent 100%),
+    radial-gradient(2.5px 2.5px at 40% 88%, rgba(255,255,255,0.82) 0%, transparent 100%),
+    radial-gradient(1px 1px at 52% 76%, rgba(255,255,255,0.58) 0%, transparent 100%),
+    radial-gradient(2px 2px at 62% 84%, rgba(255,255,255,0.75) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 72% 72%, rgba(255,255,255,0.68) 0%, transparent 100%),
+    radial-gradient(2px 2px at 82% 80%, rgba(255,255,255,0.78) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 68%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(3px 3px at 48% 40%, rgba(212,168,67,0.7) 0%, transparent 100%),
+    radial-gradient(2.5px 2.5px at 18% 30%, rgba(212,168,67,0.6) 0%, transparent 100%),
+    radial-gradient(3px 3px at 76% 55%, rgba(212,168,67,0.65) 0%, transparent 100%),
+    radial-gradient(2px 2px at 60% 15%, rgba(140,185,240,0.7) 0%, transparent 100%),
+    radial-gradient(2.5px 2.5px at 35% 80%, rgba(140,185,240,0.6) 0%, transparent 100%);
+}
+@keyframes twinkle { 0%{opacity:.65} 50%{opacity:1} 100%{opacity:.8} }
+
+/* ── MOON — soft blue ── */
+.cel-moon {
+  position: absolute;
+  top: 6%; left: 4%;
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, rgba(210,230,255,0.98), rgba(150,195,245,0.88) 45%, rgba(90,140,210,0.65));
+  box-shadow: 0 0 22px 10px rgba(150,195,245,0.45), 0 0 55px 25px rgba(100,160,230,0.2);
+}
+.cel-moon::after {
+  content: '';
+  position: absolute;
+  top: 5%; left: 26%;
+  width: 80%; height: 84%;
+  border-radius: 50%;
+  background: rgba(30,50,90,0.45);
+}
+
+ }
+
+/* ── EARTH — bottom right — large spinning globe ── */
+.cel-earth {
+  position: absolute;
+  bottom: -40px;
+  right: -40px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 38% 32%,
+      rgba(120,185,235,0.95) 0%,
+      rgba(65,130,190,0.85) 25%,
+      rgba(40,100,165,0.75) 45%,
+      rgba(25,75,130,0.65) 65%,
+      rgba(15,50,100,0.55) 100%);
+  box-shadow:
+    0 0 40px 18px rgba(65,130,190,0.25),
+    0 0 80px 40px rgba(40,100,165,0.12),
+    inset -20px -10px 40px rgba(0,0,30,0.4),
+    inset 15px 10px 30px rgba(120,185,235,0.15);
+  overflow: hidden;
+  animation: earthspin 60s linear infinite;
+}
+
+@keyframes earthspin {
+  from { filter: hue-rotate(0deg); }
+  to   { filter: hue-rotate(0deg); }
+}
+
+/* Atmosphere glow */
+.cel-earth::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: 0 0 20px 8px rgba(100,180,255,0.2), 0 0 50px 20px rgba(80,160,240,0.1);
+  pointer-events: none;
+}
+
+/* Continent shapes — rotating */
+.cel-earth::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    /* North America */
+    radial-gradient(ellipse 22% 28% at 28% 32%, rgba(34,100,55,0.8) 0%, transparent 100%),
+    /* South America */
+    radial-gradient(ellipse 14% 22% at 32% 62%, rgba(34,100,55,0.75) 0%, transparent 100%),
+    /* Europe */
+    radial-gradient(ellipse 12% 14% at 52% 30%, rgba(34,100,55,0.8) 0%, transparent 100%),
+    /* Africa */
+    radial-gradient(ellipse 13% 22% at 54% 52%, rgba(34,100,55,0.78) 0%, transparent 100%),
+    /* Asia */
+    radial-gradient(ellipse 24% 18% at 72% 30%, rgba(34,100,55,0.82) 0%, transparent 100%),
+    /* Australia */
+    radial-gradient(ellipse 10% 8% at 78% 62%, rgba(34,100,55,0.7) 0%, transparent 100%),
+    /* Ice caps */
+    radial-gradient(ellipse 40% 8% at 50% 4%, rgba(220,240,255,0.6) 0%, transparent 100%),
+    radial-gradient(ellipse 40% 8% at 50% 96%, rgba(220,240,255,0.5) 0%, transparent 100%);
+  animation: continentspin 45s linear infinite;
+}
+
+@keyframes continentspin {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/* Cloud layer */
+.cel-earth-clouds {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse 30% 8% at 20% 45%, rgba(255,255,255,0.25) 0%, transparent 100%),
+    radial-gradient(ellipse 25% 6% at 60% 25%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(ellipse 20% 5% at 75% 55%, rgba(255,255,255,0.18) 0%, transparent 100%),
+    radial-gradient(ellipse 15% 4% at 40% 70%, rgba(255,255,255,0.15) 0%, transparent 100%);
+  animation: cloudspin 30s linear infinite;
+}
+@keyframes cloudspin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Orbit ring */
+.cel-earth-ring {
+  position: absolute;
+  bottom: -55px;
+  right: -55px;
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  border: 1px solid rgba(100,180,255,0.12);
+  box-shadow: 0 0 15px rgba(100,180,255,0.06);
+}
+.cel-shoot {
+  position: absolute;
+  top: 30%; left: 15%;
+  width: 100px; height: 1.5px;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.8), rgba(255,255,255,0.1));
+  transform: rotate(18deg);
+  border-radius: 2px;
+}
+.cel-shoot2 {
+  position: absolute;
+  top: 62%; left: 40%;
+  width: 65px; height: 1px;
+  background: linear-gradient(to right, transparent, rgba(140,185,240,0.7), transparent);
+  transform: rotate(12deg);
+  border-radius: 2px;
+  animation: shootfade 7s ease-in-out infinite 3s;
+}
+.cel-shoot3 {
+  position: absolute;
+  top: 20%; right: 22%;
+  width: 48px; height: 1px;
+  background: linear-gradient(to right, transparent, rgba(212,168,67,0.6), transparent);
+  transform: rotate(22deg);
+  border-radius: 2px;
+  animation: shootfade 9s ease-in-out infinite 1.5s;
+}
+@keyframes shootfade { 0%,100%{opacity:0.2} 50%{opacity:1} }
+
+
+ }
+
+/* ── MOON — top left — blue tinted ── */
+.cel-moon {
+  position: absolute;
+  top: 6%;
+  left: 4%;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, rgba(200,225,255,0.98), rgba(140,185,240,0.85) 45%, rgba(80,130,200,0.6));
+  box-shadow: 0 0 22px 10px rgba(140,185,240,0.4), 0 0 55px 25px rgba(100,160,230,0.18);
+}
+.cel-moon::after {
+  content: '';
+  position: absolute;
+  top: 5%;
+  left: 26%;
+  width: 80%;
+  height: 84%;
+  border-radius: 50%;
+  background: rgba(251,247,239,0.55);
+}
+
+/* ── EARTH — bottom right ── */
+.cel-earth {
+  position: absolute;
+  bottom: 5%;
+  right: 4%;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(100,170,220,0.6), rgba(45,100,160,0.42) 45%, rgba(30,80,50,0.3));
+  box-shadow: 0 0 18px 8px rgba(45,100,150,0.16), 0 0 44px 18px rgba(26,88,88,0.08);
+  overflow: hidden;
+}
+.cel-earth::before {
+  content: '';
+  position: absolute;
+  top: 18%; left: 8%;
+  width: 38%; height: 50%;
+  border-radius: 50%;
+  background: rgba(30,80,50,0.48);
+}
+.cel-earth::after {
+  content: '';
+  position: absolute;
+  top: 12%; right: 10%;
+  width: 32%; height: 58%;
+  border-radius: 40%;
+  background: rgba(30,80,50,0.4);
+}
+
+ 50%{opacity:1} }
+
+
+
+.logo-eye {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: 4px;
+  color: #D4A843;
+  margin-bottom: 24px;
+  line-height: 1.8;
+}
+
+.logo-title {
+  font-size: clamp(24px, 6vw, 72px);
+  font-weight: 300;
+  font-style: italic;
+  color: #E8D5B0;
+  line-height: 1.1;
+  margin-bottom: 16px;
+  width: 100%;
+  text-align: center;
+}
+
+.logo-title b {
+  font-weight: 700;
+  font-style: normal;
+  color: #D4A843;
+  display: block;
+  font-size: clamp(22px, 5.5vw, 68px);
+  letter-spacing: -0.5px;
+  width: 100%;
+}
+
+.logo-tag {
+  font-style: italic;
+  font-size: clamp(14px, 3.8vw, 18px);
+  color: #E8CC6A;
+  max-width: 340px;
+  line-height: 1.8;
+  margin-bottom: 40px;
+}
+
+.btn-main {
+  display: inline-block;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: #fff;
+  background: linear-gradient(135deg, #C4A020, #8B6910);
+  border: none;
+  padding: 16px 40px;
+  cursor: pointer;
+  border-radius: 2px;
+  text-decoration: none;
+}
+
+/* ── SHARED PAGE HEADER ── */
+.page-head {
+  background: rgba(10,20,45,0.55);
+  border-bottom: 2px solid rgba(184,146,14,.25);
+  padding: 20px 18px 16px;
+  text-align: center;
+}
+.page-head h2 {
+  font-size: clamp(18px, 5vw, 32px);
+  font-weight: 700;
+  color: #F0D878;
+  margin-bottom: 6px;
+  line-height: 1.2;
+  word-break: break-word;
+}
+.page-head p {
+  font-style: italic;
+  font-size: 13px;
+  color: #E8CC6A;
+  line-height: 1.6;
+}
+
+/* ── PRICING ── */
+#price { padding: 0 0 80px; }
+.plans-wrap { padding: 10px 12px 120px; }
+
+.plan-card {
+  background: rgba(15,28,55,0.80);
+  border: 1.5px solid rgba(212,168,67,.4);
+  border-radius: 10px;
+  padding: 12px 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all .25s;
+  box-shadow: 0 2px 10px rgba(0,0,0,.07);
+  position: relative;
+}
+.plan-card:hover, .plan-card.sel {
+  border-color: #D4A843;
+  background: rgba(20,38,70,0.85);
+  box-shadow: 0 4px 16px rgba(184,146,14,.18);
+}
+.plan-card.hot { border-color: rgba(184,146,14,.5); }
+
+.plan-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #C4A020, #8B6910);
+  color: #fff;
+  font-family: 'Cinzel', serif;
+  font-size: 7px;
+  letter-spacing: 2px;
+  padding: 3px 10px;
+  border-radius: 3px;
+  margin-bottom: 8px;
+}
+.plan-badge.pink { background: linear-gradient(135deg, #C46888, #8B2A50); }
+
+.plan-name {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: #D4A843;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.plan-price-line {
+  font-size: 22px;
+  font-weight: 700;
+  color: #E8D5B0;
+  margin-bottom: 6px;
+}
+.plan-price-line .cents {
+  font-size: 14px;
+  font-weight: 400;
+  color: #E8CC6A;
+}
+
+.plan-desc {
+  font-style: italic;
+  font-size: 13px;
+  color: #E8CC6A;
+  line-height: 1.6;
+}
+
+/* ADDONS */
+.addons-head {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 5px;
+  color: #D4A843;
+  text-align: center;
+  padding: 24px 14px 8px;
+}
+.addons-sub {
+  font-style: italic;
+  font-size: 13px;
+  color: #E8CC6A;
+  text-align: center;
+  padding: 0 14px 16px;
+}
+.addons-wrap { padding: 0 14px; }
+.addon-card {
+  background: rgba(15,28,55,0.80);
+  border: 1.5px solid rgba(212,168,67,.35);
+  border-radius: 6px;
+  padding: 14px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all .25s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.05);
+}
+.addon-card:hover, .addon-card.sel {
+  border-color: #D4A843;
+  background: #FFFBF2;
+}
+.addon-card.sel::after {
+  content: '✦';
+  font-size: 12px;
+  color: #D4A843;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.addon-emoji { font-size: 24px; flex-shrink: 0; }
+.addon-info { flex: 1; }
+.addon-name { font-weight: 700; font-size: 14px; color: #F0D878; margin-bottom: 2px; }
+.addon-price { font-family: Arial, sans-serif; font-size: 8px; letter-spacing: 2px; color: #D4A843; margin-bottom: 3px; }
+.addon-desc { font-style: italic; font-size: 12px; color: #E8CC6A; line-height: 1.4; }
+
+/* CART */
+.cart-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(15,28,55,0.80);
+  border-top: 2px solid #B8920E;
+  padding: 12px 18px;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  z-index: 100;
+  box-shadow: 0 -4px 20px rgba(0,0,0,.12);
+}
+.cart-bar.show { display: flex; }
+.cart-left { flex: 1; }
+.cart-label { font-style: italic; font-size: 13px; color: #E8CC6A; }
+.cart-total { font-size: 22px; font-weight: 700; color: #E8D5B0; }
+.cart-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: #fff;
+  background: linear-gradient(135deg, #C4A020, #8B6910);
+  border: none;
+  padding: 13px 22px;
+  cursor: pointer;
+  border-radius: 2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.cart-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* ── FORM ── */
+#form { padding: 0 0 80px; background: transparent; }
+
+.form-body { padding: 20px 16px; }
+.form-label {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: 3px;
+  color: #D4A843;
+  display: block;
+  margin-bottom: 5px;
+}
+.form-input {
+  width: 100%;
+  background: rgba(15,28,55,0.80);
+  border: 1.5px solid rgba(184,146,14,.25);
+  color: #F0D878;
+  font-family: Georgia, serif;
+  font-size: clamp(14px, 3.8vw, 18px);
+  padding: 11px 13px;
+  margin-bottom: 14px;
+  outline: none;
+  border-radius: 4px;
+  -webkit-appearance: none;
+}
+.form-input:focus { border-color: #D4A843; box-shadow: 0 0 0 3px rgba(184,146,14,.1); }
+.form-input::placeholder { color: #C4982E; font-style: italic; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-row.three { grid-template-columns: 1fr 1fr 1fr; }
+
+.toggle-head {
+  background: rgba(184,146,14,.06);
+  border: 1.5px solid rgba(184,146,14,.18);
+  border-radius: 4px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.toggle-head span { font-family: Arial, sans-serif; font-size: 9px; letter-spacing: 3px; color: #D4A843; }
+.toggle-head .arr { font-size: 11px; transition: transform .3s; }
+.toggle-head .arr.open { transform: rotate(180deg); }
+.collapse { display: none; padding-top: 4px; }
+.collapse.open { display: block; }
+
+.form-divider { height: 1px; background: rgba(184,146,14,.2); margin: 16px 0; }
+
+.copy-btn {
+  width: 44px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cinzel', serif; font-size: 12px; font-weight: 600;
+  color: rgba(212,168,67,0.6);
+  background: rgba(10,20,45,0.8);
+  border: 1px solid rgba(212,168,67,0.25);
+  border-radius: 4px; cursor: pointer; transition: all .2s;
+}
+.copy-btn.on { color: #F0D878; border-color: #D4A843; background: rgba(30,55,100,0.9); }
+.wallart-btn {
+  flex: 1; padding: 8px; text-align: center;
+  font-family: 'Cinzel', serif; font-size: 8px; letter-spacing: 1.5px;
+  color: rgba(212,168,67,0.6);
+  background: rgba(10,20,45,0.8);
+  border: 1px solid rgba(212,168,67,0.25);
+  border-radius: 4px; cursor: pointer; transition: all .2s;
+}
+.wallart-btn.on { color: #F0D878; border-color: #D4A843; background: rgba(30,55,100,0.9); }
+.btn-generate {
+  width: 100%;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: #fff;
+  background: linear-gradient(135deg, #C4A020, #8B6910);
+  border: none;
+  padding: 18px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 8px;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 15px rgba(196,160,32,0.3);
+}
+.btn-generate:hover { background: linear-gradient(135deg, #D4A843, #A07820); }
+.btn-generate:disabled { opacity: .5; cursor: not-allowed; }
+
+/* ── LOADING ── */
+.load-spin { font-size: 42px; animation: spin 7s linear infinite; margin-bottom: 24px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.load-title { font-style: italic; font-size: clamp(17px, 4vw, 26px); color: #E8D5B0; margin-bottom: 10px; transition: opacity .4s; }
+.load-sub { font-style: italic; font-size: 14px; color: #E8CC6A; line-height: 1.7; transition: opacity .4s; }
+.dots { display: flex; gap: 8px; margin-top: 28px; }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: #B8920E; animation: blink 1.4s ease-in-out infinite; }
+.dot:nth-child(2) { animation-delay: .2s; }
+.dot:nth-child(3) { animation-delay: .4s; }
+@keyframes blink { 0%,100%{opacity:.2;transform:scale(1)} 50%{opacity:1;transform:scale(1.4)} }
+
+/* ── RESULT ── */
+#result { padding: 0 0 20px; background: rgba(15,30,60,0.7); }
+
+.result-cover {
+  background: rgba(10,20,45,0.75);
+  border-bottom: 3px solid rgba(184,146,14,.3);
+  padding: 52px 20px 36px;
+  text-align: center;
+}
+.result-cover-eye {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: 6px;
+  color: #D4A843;
+  margin-bottom: 16px;
+}
+.result-cover-name {
+  font-size: clamp(28px, 7vw, 58px);
+  font-weight: 300;
+  font-style: italic;
+  color: #E8D5B0;
+  margin-bottom: 10px;
+  line-height: 1.1;
+}
+.result-cover-sign {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: #D4A843;
+  margin-bottom: 14px;
+}
+.result-cover-details {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
+}
+.rcd {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: #E8CC6A;
+  padding: 0 10px;
+  border-right: 1px solid rgba(184,146,14,.2);
+}
+.rcd:last-child { border-right: none; }
+
+.result-body {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 36px 18px 48px;
+}
+.result-body h2 {
+  font-size: clamp(20px, 4.5vw, 36px);
+  font-weight: 700;
+  color: #F0D878;
+  text-align: center;
+  margin: 40px 0 6px;
+  line-height: 1.1;
+}
+.result-body h2.rose { color: #E8A0B8; }
+.result-body h2.teal { color: #7BC4C4; }
+.result-body h2.gold { color: #D4A843; }
+.result-body h2.sage { color: #7BC49A; }
+.result-body h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: 4px;
+  color: rgba(212,168,67,.7);
+  text-align: center;
+  margin: 0 0 28px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(184,146,14,.18);
+}
+.result-body p {
+  font-size: 17px;
+  line-height: 1.95;
+  color: #F0D878;
+  margin-bottom: 1.5em;
+}
+.result-body p.drop::first-letter {
+  font-size: 5.5em;
+  font-weight: 700;
+  float: left;
+  line-height: .74;
+  margin: .07em .09em 0 0;
+  color: #D4A843;
+}
+.result-body blockquote {
+  background: rgba(10,20,45,0.55);
+  border-top: 2px solid rgba(184,146,14,.25);
+  border-bottom: 2px solid rgba(184,146,14,.25);
+  padding: 24px 20px;
+  margin: 32px -18px;
+  text-align: center;
+}
+.result-body blockquote p {
+  font-style: italic;
+  font-weight: 600;
+  font-size: clamp(15px, 2.5vw, 21px);
+  color: #E8D5B0;
+  margin: 0 !important;
+  text-align: center !important;
+  line-height: 1.55;
+}
+.result-body hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(184,146,14,.25), transparent);
+  margin: 32px 0;
+}
+.result-body .nb { background: rgba(10,20,45,0.7); border-color: rgba(212,168,67,0.3);
+  background: rgba(10,20,45,0.55);
+  border-top: 2px solid rgba(184,146,14,.2);
+  border-bottom: 2px solid rgba(184,146,14,.2);
+  padding: 36px 20px;
+  margin: 36px -18px;
+  text-align: center;
+}
+.result-body .nb p {
+  font-style: italic;
+  font-size: clamp(15px, 2.5vw, 22px);
+  color: #E8D5B0;
+  line-height: 1.8;
+  text-align: center !important;
+  margin: 0 !important;
+}
+.result-body .nb p em { color: #D4A843; }
+
+/* FREQUENCY PLAYER */
+.freq-section {
+  background: rgba(10,20,45,0.55);
+  border-top: 2px solid rgba(184,146,14,.2);
+  border-bottom: 2px solid rgba(184,146,14,.2);
+  padding: 36px 18px;
+  margin: 36px -18px;
+  text-align: center;
+}
+.freq-section-eye {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: 5px;
+  color: #D4A843;
+  margin-bottom: 6px;
+  display: block;
+}
+.freq-section-sub { font-style: italic; font-size: 14px; color: #E8CC6A; margin-bottom: 20px; }
+.freq-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.freq-card {
+  background: rgba(15,28,55,0.80);
+  border: 1.5px solid rgba(212,168,67,.4);
+  border-radius: 6px;
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .25s;
+  box-shadow: 0 2px 6px rgba(0,0,0,.05);
+}
+.freq-card:hover, .freq-card.playing {
+  border-color: #D4A843;
+  background: #FFFBF2;
+  box-shadow: 0 4px 12px rgba(184,146,14,.15);
+}
+.freq-hz { font-size: 28px; font-weight: 700; color: #E8D5B0; line-height: 1; margin-bottom: 3px; }
+.freq-hz span { font-size: 11px; color: #E8CC6A; font-weight: 400; }
+.freq-label { font-family: Arial, sans-serif; font-size: 7px; letter-spacing: 2px; color: #D4A843; display: block; margin-bottom: 6px; text-transform: uppercase; }
+.freq-purpose { font-style: italic; font-size: 11px; color: #E8CC6A; line-height: 1.4; margin-bottom: 10px; }
+.freq-play-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 7px;
+  letter-spacing: 2px;
+  color: #D4A843;
+  border: 1px solid rgba(184,146,14,.35);
+  padding: 5px 10px;
+  display: inline-block;
+  border-radius: 2px;
+}
+.freq-tip { font-style: italic; font-size: 12px; color: #E8CC6A; margin-top: 14px; }
+
+/* ADDON TABS */
+.addon-tabs {
+  background: rgba(10,20,45,0.55);
+  padding: 32px 16px;
+  border-top: 2px solid rgba(184,146,14,.2);
+}
+.addon-tabs-title { font-size: clamp(18px, 4vw, 28px); font-weight: 700; font-style: italic; color: #E8D5B0; text-align: center; margin-bottom: 4px; }
+.addon-tabs-sub { font-style: italic; font-size: 13px; color: #E8CC6A; text-align: center; margin-bottom: 20px; }
+.tab-nav { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 20px; }
+.tab-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: #E8CC6A;
+  background: rgba(15,28,55,0.80);
+  border: 1px solid rgba(184,146,14,.22);
+  padding: 7px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all .25s;
+  white-space: nowrap;
+}
+.tab-btn.active, .tab-btn:hover {
+  color: #E8D5B0;
+  border-color: #D4A843;
+  background: #FFFBF2;
+}
+.tab-panel { display: none; max-width: 800px; margin: 0 auto; }
+.tab-panel.active { display: block; }
+.tool-card {
+  background: rgba(10,20,45,0.75);
+  border: 1.5px solid rgba(184,146,14,.18);
+  border-radius: 8px;
+  padding: 20px 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
+}
+.tool-card h3 { font-size: 18px; font-weight: 700; color: #E8D5B0; margin-bottom: 4px; }
+.tool-sub { font-style: italic; font-size: 12px; color: #E8CC6A; display: block; margin-bottom: 12px; }
+.ask-input {
+  width: 100%;
+  background: rgba(15,30,60,0.7);
+  border: 1.5px solid rgba(212,168,67,.4);
+  color: #F0D878;
+  font-family: Georgia, serif;
+  font-size: 15px;
+  padding: 11px 13px;
+  margin-bottom: 10px;
+  outline: none;
+  border-radius: 4px;
+  resize: vertical;
+  min-height: 65px;
+}
+.ask-input:focus { border-color: #D4A843; }
+.ask-input::placeholder { color: #C4982E; font-style: italic; }
+.ask-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: #fff;
+  background: linear-gradient(135deg, #C4A020, #8B6910);
+  border: none;
+  padding: 11px 24px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+.response-box {
+  background: rgba(15,30,60,0.7);
+  border: 1.5px solid rgba(212,168,67,.4);
+  border-radius: 6px;
+  padding: 16px;
+  margin-top: 12px;
+  font-style: italic;
+  font-size: 15px;
+  color: #F0D878;
+  line-height: 1.8;
+  display: none;
+}
+.tarot-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0; }
+.t-card {
+  background: linear-gradient(135deg, #2D1A60, #1a0e3a);
+  border: 2px solid rgba(184,146,14,.3);
+  aspect-ratio: 2/3;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 20px;
+  border-radius: 4px; transition: all .3s;
+}
+.t-card:hover { border-color: #D4A843; transform: translateY(-4px); }
+.t-card.flipped { background: rgba(10,20,45,0.55); border-color: #D4A843; }
+.chakra-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 12px 0; }
+.chk-card {
+  background: rgba(15,30,60,0.7);
+  border: 1.5px solid rgba(184,146,14,.18);
+  border-radius: 6px;
+  padding: 14px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .25s;
+}
+.chk-card:hover { border-color: #D4A843; background: #FFFBF2; }
+.chk-dot { width: 32px; height: 32px; border-radius: 50%; margin: 0 auto 8px; }
+.chk-name { font-family: Arial, sans-serif; font-size: 8px; letter-spacing: 2px; color: #E8CC6A; margin-bottom: 3px; }
+.chk-hz { font-size: 16px; font-weight: 700; color: #E8D5B0; margin-bottom: 3px; }
+.chk-desc { font-style: italic; font-size: 11px; color: #E8CC6A; }
+.quiz-q { background: rgba(15,30,60,0.7); border: 1px solid rgba(184,146,14,.18); border-radius: 6px; padding: 14px; margin-bottom: 10px; }
+.quiz-qt { font-size: 14px; color: #F0D878; margin-bottom: 10px; line-height: 1.5; }
+.quiz-opts { display: flex; gap: 6px; flex-wrap: wrap; }
+.q-opt { font-family: Arial, sans-serif; font-size: 8px; letter-spacing: 1.5px; color: #E8CC6A; border: 1px solid rgba(184,146,14,.2); background: rgba(15,28,55,0.80); padding: 6px 12px; cursor: pointer; border-radius: 3px; transition: all .25s; }
+.q-opt.sel { background: rgba(184,146,14,.1); border-color: #D4A843; color: #E8D5B0; }
+
+
+
+
+
+.palm-area { border: 2px dashed rgba(184,146,14,.3); background: rgba(15,30,60,0.7); border-radius: 8px; padding: 28px 16px; text-align: center; cursor: pointer; margin: 12px 0; }
+.compat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
+.compat-card { background: rgba(15,30,60,0.7); border: 1px solid rgba(184,146,14,.18); border-radius: 6px; padding: 14px; text-align: center; cursor: pointer; transition: all .25s; }
+.compat-card:hover { border-color: #D4A843; background: #FFFBF2; }
+
+
+.result-actions {
+  background: rgba(10,20,45,0.55);
+  padding: 24px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  border-top: 2px solid rgba(184,146,14,.2);
+}
+.act-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 3px;
+  padding: 11px 22px;
+  cursor: pointer;
+  border: 1.5px solid rgba(184,146,14,.3);
+  background: rgba(15,28,55,0.80);
+  color: #E8CC6A;
+  border-radius: 3px;
+  transition: all .25s;
+}
+.act-btn:hover { border-color: #D4A843; color: #E8D5B0; }
+.act-btn.primary { background: linear-gradient(135deg, #C4A020, #8B6910); color: #fff; border-color: transparent; }
+
+/* ── BOOK TYPE CARDS ── */
+.book-type-card{background:rgba(255,255,255,0.92);border:1.5px solid rgba(139,42,80,.2);border-radius:12px;margin-bottom:14px;overflow:hidden;cursor:pointer;transition:all .3s;box-shadow:0 3px 12px rgba(0,0,0,.08);}
+.book-type-card:hover{border-color:#8B2A50;transform:translateY(-3px);box-shadow:0 8px 24px rgba(139,42,80,.15);}
+.book-type-card.sel{border-color:#8B2A50;box-shadow:0 0 0 3px rgba(139,42,80,.2);}
+.bt-cover{padding:22px 20px 16px;text-align:center;}
+.bt-cover-star{font-size:26px;margin-bottom:8px;display:block;}
+.bt-cover-title{font-style:italic;font-size:17px;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:4px;line-height:1.2;}
+.bt-cover-sub{font-family:Arial,sans-serif;font-size:8px;letter-spacing:3px;color:rgba(255,255,255,.45);}
+.bt-info{padding:16px 16px 14px;}
+.bt-name{font-weight:700;font-size:17px;color:#F0D878;margin-bottom:3px;}
+.bt-price{font-size:22px;font-weight:700;color:#8B2A50;margin-bottom:8px;}
+.bt-desc{font-style:italic;font-size:13.5px;color:rgba(230,210,170,0.9);line-height:1.7;margin-bottom:10px;}
+.bt-includes{border-top:1px solid rgba(184,146,14,.15);padding-top:10px;}
+.bt-item{font-size:12.5px;color:#6A5840;padding:3px 0;line-height:1.4;}
+
+/* ── FAMILY CONSTELLATION ── */
+#family-screen { padding: 0 0 80px; background: rgba(15,30,60,0.7); }
+.family-member-card { background: rgba(15,28,55,0.80); border: 1.5px solid rgba(212,168,67,.4); border-radius: 8px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.05); }
+.family-member-card.pet { border-color: rgba(42,90,56,.35); }
+.fm-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.fm-title { font-weight: 700; font-size: 16px; color: #E8D5B0; }
+.fm-remove { background: none; border: 1px solid rgba(184,146,14,.2); color: #E8CC6A; font-size: 12px; padding: 4px 10px; cursor: pointer; border-radius: 3px; }
+.fm-remove:hover { border-color: #C0392B; color: #C0392B; }
+.add-member-btn { width: 100%; background: rgba(15,28,55,0.80); border: 2px dashed rgba(184,146,14,.3); border-radius: 8px; padding: 18px; text-align: center; cursor: pointer; color: #D4A843; font-style: italic; font-size: 16px; transition: all .25s; margin-bottom: 12px; display: block; }
+.add-member-btn:hover { border-color: #D4A843; background: #FFFBF2; }
+.member-type-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin: 10px 0; }
+.mt-btn { background: rgba(10,20,45,0.9); border: 1px solid rgba(212,168,67,.3); border-radius: 4px; padding: 7px 2px; text-align: center; cursor: pointer; transition: all .25s; }
+.mt-btn:hover, .mt-btn.sel { border-color: #D4A843; background: rgba(30,55,100,0.95); }
+.mt-emoji { font-size: 16px; display: block; margin-bottom: 2px; }
+.mt-label { font-family: Arial, sans-serif; font-size: 5.5px; letter-spacing: 0.5px; color: #D4A843; }
+.constellation-wrap { background: #1A0E3A; border-radius: 12px; padding: 16px; margin: 16px 0; text-align: center; position: relative; overflow: hidden; }
+.constellation-wrap::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, rgba(184,146,14,.07), transparent 70%); }
+#constellation-canvas { width: 100%; max-width: 500px; border-radius: 8px; display: block; margin: 0 auto; position: relative; }
+.wall-art-btn { width: 100%; background: linear-gradient(135deg, #8B2A50, #C46888); color: #fff; border: none; border-radius: 6px; padding: 16px; font-family: Arial, sans-serif; font-size: 11px; letter-spacing: 4px; cursor: pointer; margin-top: 12px; }
+.gen-family-btn { width: 100%; background: linear-gradient(135deg, #C4A020, #8B6910); color: #fff; border: none; border-radius: 6px; padding: 18px; font-family: Arial, sans-serif; font-size: 11px; letter-spacing: 4px; cursor: pointer; margin-top: 8px; }
+.compat-line { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(184,146,14,.1); }
+.compat-line:last-child { border-bottom: none; }
+.compat-names { font-style: italic; font-size: 14px; color: #F0D878; }
+.compat-score { font-weight: 700; font-size: 18px; }
+.compat-bar { height: 4px; background: rgba(184,146,14,.15); border-radius: 2px; margin-top: 4px; overflow: hidden; }
+.compat-fill { height: 100%; border-radius: 2px; background: linear-gradient(to right, #B8920E, #C46888); }
+/* ── SCREEN DISPLAY ── */
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<!-- CELESTIAL BACKGROUND -->
+<div id="celestial-bg">
+  <div class="cel-moon"></div>
+  <div class="cel-earth">
+    <div class="cel-earth-clouds"></div>
+  </div>
+  <div class="cel-earth-ring"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- Shooting stars -->
+  <div class="cel-shoot"></div>
+  <div class="cel-shoot2"></div>
+  <div class="cel-shoot3"></div>
+</div>
+
+<!-- LANDING -->
+<div id="land" class="screen on">
+  <div class="logo-eye">✦ &nbsp; COSMIC CONCEPTION &nbsp; ✦</div>
+  <div style="width:100%;text-align:center;margin-bottom:20px;padding:0 16px;">
+    <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:3vw;font-weight:700;font-style:italic;color:#D4A843;line-height:1.3;letter-spacing:3px;text-shadow:0 2px 8px rgba(0,0,0,0.6);">Cosmic</div>
+    <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:2.8vw;font-weight:700;font-style:italic;color:#E8B820;line-height:1.3;letter-spacing:2px;text-shadow:0 2px 8px rgba(0,0,0,0.6);">Conception</div>
+  </div>
+  <p class="logo-tag">You were not born by chance. You were conceived by something greater — written into existence with purpose, with gifts, with a calling that belongs only to you. The stars on the morning you arrived simply confirmed what was already true.</p>
+  <button class="btn-main" onclick="document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');}); document.getElementById('price').classList.add('on'); window.scrollTo(0,0);">DISCOVER YOUR STORY</button>
+  <button onclick="testAPI()" style="margin-top:12px;background:none;border:1px solid rgba(212,168,67,0.3);color:rgba(212,168,67,0.5);font-size:10px;padding:6px 16px;border-radius:4px;cursor:pointer;">test connection</button>
+</div>
+
+<!-- FAMILY CONSTELLATION PREVIEW MODAL -->
+<div id="family-preview-modal" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(5,2,16,0.95);overflow-y:auto;">
+  <div style="max-width:380px;margin:0 auto;padding:24px 16px 40px;">
+    
+    <div style="text-align:center;margin-bottom:16px;">
+      <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:4px;color:rgba(212,168,67,0.5);margin-bottom:8px;">✦ &nbsp; COSMIC CONCEPTION &nbsp; ✦</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:24px;color:#F0D878;margin-bottom:4px;">Family Constellation</div>
+      <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:3px;color:rgba(212,168,67,0.45);">EXCLUSIVE · $39.99</div>
+    </div>
+
+    <!-- Live star chart demo -->
+    <canvas id="preview-canvas" width="340" height="340" style="display:block;width:100%;border-radius:50%;border:2px solid rgba(212,168,67,0.3);box-shadow:0 0 40px rgba(212,168,67,0.1);margin-bottom:20px;"></canvas>
+
+    <!-- What they get -->
+    <div style="background:rgba(15,28,55,0.9);border:1px solid rgba(212,168,67,0.2);border-radius:10px;padding:16px;margin-bottom:16px;">
+      <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:#D4A843;margin-bottom:12px;">WHAT YOU RECEIVE</div>
+      
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;">
+        <div style="font-size:20px;flex-shrink:0;">⭕</div>
+        <div>
+          <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:#E8A0B8;margin-bottom:3px;">FAMILY STAR CHART</div>
+          <div style="font-style:italic;font-size:12px;color:rgba(200,180,140,0.75);line-height:1.5;">Every family member placed on a single astrological wheel. Their signs, planets, and birth energies all mapped together — showing exactly how your souls loop around and intercross each other.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;">
+        <div style="font-size:20px;flex-shrink:0;">🔗</div>
+        <div>
+          <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:#7BC4C4;margin-bottom:3px;">COMPATIBILITY MAP</div>
+          <div style="font-style:italic;font-size:12px;color:rgba(200,180,140,0.75);line-height:1.5;">Every pairing scored and explained. Who lifts who. Where the tension lives. What each relationship is built to do.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;">
+        <div style="font-size:20px;flex-shrink:0;">📖</div>
+        <div>
+          <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:#90D890;margin-bottom:3px;">FAMILY SOUL STORY</div>
+          <div style="font-style:italic;font-size:12px;color:rgba(200,180,140,0.75);line-height:1.5;">A beautiful AI-written narrative about your family as a cosmic unit — why these specific souls found each other, and what you are building together.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;">
+        <div style="font-size:20px;flex-shrink:0;">🖨️</div>
+        <div>
+          <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:#D4A843;margin-bottom:3px;">PRINTABLE WALL ART</div>
+          <div style="font-style:italic;font-size:12px;color:rgba(200,180,140,0.75);line-height:1.5;">Your family star chart is fully printable — frame it and hang it. A beautiful piece of cosmic art that shows your family's unique constellation for generations to come.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:flex-start;gap:10px;">
+        <div style="font-size:20px;flex-shrink:0;">🐾</div>
+        <div>
+          <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:#D4A843;margin-bottom:3px;">PETS INCLUDED</div>
+          <div style="font-style:italic;font-size:12px;color:rgba(200,180,140,0.75);line-height:1.5;">Your animals are part of your constellation too. Add any cat, dog, or pet — they are placed on the chart alongside every family member.</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;">
+      <button onclick="hideFamilyPreview();" style="flex:1;font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:#D4A843;background:transparent;border:1px solid rgba(212,168,67,0.3);padding:12px;cursor:pointer;border-radius:4px;">← BACK</button>
+      <button onclick="hideFamilyPreview();pick(document.querySelector('.plan-card[onclick*=\'family\']'),'family',39.99,'Family Constellation');" style="flex:2;font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:#fff;background:linear-gradient(135deg,#C46888,#8B2A50);border:none;padding:12px;cursor:pointer;border-radius:4px;">SELECT · $39.99</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- PRICING -->
+<div id="price" class="screen">
+  <div class="page-head">
+    <h2>Choose Your Reading</h2>
+    <div style="margin:8px auto 0;max-width:320px;background:linear-gradient(135deg,rgba(180,120,20,0.2),rgba(100,50,120,0.2));border:1px solid rgba(212,168,67,0.4);border-radius:8px;padding:8px 14px;text-align:center;">
+      <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:3px;color:#F0D878;margin-bottom:4px;">✦ &nbsp; CUSPIAN ASTROS &nbsp; ✦</div>
+      <div style="font-style:italic;font-size:11px;color:rgba(220,200,160,0.8);">Born on the cusp? Your reading goes deeper — both signs, both energies, the rare soul you truly are.</div>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+      <button onclick="document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');}); document.getElementById('land').classList.add('on'); window.scrollTo(0,0);" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:#D4A843;background:transparent;border:1px solid rgba(212,168,67,0.3);padding:7px 16px;cursor:pointer;border-radius:3px;">🏠 HOME</button>
+      <button onclick="document.getElementById('books-section').scrollIntoView({behavior:'smooth'});" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:#E8A0B8;background:transparent;border:1px solid rgba(196,104,136,0.4);padding:7px 16px;cursor:pointer;border-radius:3px;">📖 SEE BOOKS ↓</button>
+    </div>
+  </div>
+
+  <div class="plans-wrap">
+
+    <div class="plan-card" onclick="pick(this,'sneak',0,'Free Sneak Peek')">
+      <span class="plan-name">SNEAK PEEK</span>
+      <div class="plan-price-line" style="color:#27AE60;">FREE <span class="cents">— no credit card needed</span></div>
+      <div class="plan-desc">Sun sign · Life Path · Soul glimpse</div>
+    </div>
+
+    <div class="plan-card hot" onclick="pick(this,'complete',7.99,'Complete Reading')">
+      <span class="plan-badge">MOST POPULAR</span>
+      <span class="plan-name">COMPLETE READING</span>
+      <div class="plan-price-line">$7.99 <span class="cents">— your full cosmic story</span></div>
+      <div class="plan-desc">Full birth chart · All 5 numerology numbers · Soul purpose · How you love · Shadow gifts · Spirit animals · 4 healing frequencies</div>
+    </div>
+
+    <div class="plan-card" onclick="pick(this,'couples',9.99,'Couples')">
+      <span class="plan-name">COUPLES</span>
+      <div class="plan-price-line">$9.99 <span class="cents">— two people</span></div>
+      <div class="plan-desc">Both Complete readings · Full compatibility · Love frequency</div>
+    </div>
+
+    <div class="plan-card" style="border-color:rgba(139,42,80,.4);" onclick="pick(this,'family',39.99,'Family Constellation')">
+      <span class="plan-badge pink">EXCLUSIVE</span>
+      <span class="plan-name" style="color:#E8A0B8;">FAMILY CONSTELLATION</span>
+      <div class="plan-price-line" style="color:#F0D878;">$39.99 <span class="cents">— the whole family</span></div>
+      <div class="plan-desc">Unlimited members & pets · Compatibility map · Star chart · Family soul story · Printable wall art</div>
+      <div onclick="event.stopPropagation();showFamilyPreview();" style="margin-top:10px;background:rgba(139,42,80,0.2);border:1px solid rgba(196,104,136,0.4);border-radius:5px;padding:7px;text-align:center;cursor:pointer;">
+        <span style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:#E8A0B8;">👁 SEE WHAT YOU GET</span>
+      </div>
+    </div>
+
+    <div id="books-section" style="background:rgba(139,42,80,0.3);border:1px solid rgba(196,104,136,0.5);border-radius:8px;padding:10px;text-align:center;margin:14px 0 10px;">
+      <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:4px;color:#E8A0B8;font-weight:700;">📖 &nbsp; PRINTED BOOKS &nbsp; 📖</div>
+      <div style="font-style:italic;font-size:12px;color:rgba(220,200,160,0.7);margin-top:4px;">Hardbound · shipped to your door</div>
+    </div>
+
+    <div class="plan-card" onclick="pick(this,'book_personal',49.99,'The Personal Book')" style="border-color:rgba(196,104,136,0.5);padding:0;overflow:hidden;position:relative;">
+      
+      <!-- Book visual preview -->
+      <div style="display:flex;align-items:stretch;min-height:120px;">
+        <!-- Book mockup -->
+        <div style="flex-shrink:0;width:80px;display:flex;align-items:stretch;perspective:400px;">
+          <!-- Spine -->
+          <div style="width:14px;background:#8B2A50;display:flex;align-items:center;justify-content:center;">
+            <div style="font-size:6px;color:rgba(255,255,255,0.5);writing-mode:vertical-rl;letter-spacing:2px;font-family:'Cinzel',serif;">COSMIC</div>
+          </div>
+          <!-- Cover -->
+          <div style="flex:1;background:linear-gradient(135deg,#2D1A60,#1a0e3a);border:1px solid rgba(196,104,136,0.5);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px;gap:4px;transform:rotateY(-8deg);box-shadow:4px 0 12px rgba(0,0,0,0.4);">
+            <div style="font-size:16px;">☉</div>
+            <div style="font-size:10px;color:#C46888;text-align:center;">⟡</div>
+            <div style="font-size:14px;">☽</div>
+            <div style="font-size:8px;color:rgba(255,255,255,0.3);font-family:'Cinzel',serif;letter-spacing:1px;margin-top:4px;">CC</div>
+          </div>
+        </div>
+        <!-- Book info -->
+        <div style="flex:1;padding:14px 12px;display:flex;flex-direction:column;justify-content:space-between;">
+          <div>
+            <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:#C46888;font-weight:700;margin-bottom:4px;">THE PERSONAL BOOK</div>
+            <div style="font-style:italic;font-size:12px;color:rgba(240,215,120,0.7);margin-bottom:6px;">Your complete cosmic biography</div>
+            <div style="font-size:10px;color:rgba(200,180,140,0.65);line-height:1.5;">Birth chart · Numerology · Soul purpose · Spirit animals · Frequencies</div>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:6px;margin-top:10px;">
+            <div style="font-size:22px;font-weight:700;color:#F0D878;">$44.99</div>
+            <div style="font-size:11px;font-style:italic;color:rgba(212,168,67,0.5);">— your story</div>
+          </div>
+        </div>
+      </div>
+      <!-- Tap hint -->
+      <div style="background:rgba(0,0,0,0.2);border-top:1px solid rgba(196,104,136,0.25);padding:6px;text-align:center;font-family:'Cinzel',serif;font-size:7px;letter-spacing:3px;color:#C46888;">TAP TO SELECT</div>
+    </div>
+
+    <div class="plan-card" onclick="pick(this,'book_family',59.99,'The Family Book')" style="border-color:rgba(123,196,154,0.5);padding:0;overflow:hidden;position:relative;">
+      
+      <!-- Book visual preview -->
+      <div style="display:flex;align-items:stretch;min-height:120px;">
+        <!-- Book mockup -->
+        <div style="flex-shrink:0;width:80px;display:flex;align-items:stretch;perspective:400px;">
+          <!-- Spine -->
+          <div style="width:14px;background:#2A5838;display:flex;align-items:center;justify-content:center;">
+            <div style="font-size:6px;color:rgba(255,255,255,0.5);writing-mode:vertical-rl;letter-spacing:2px;font-family:'Cinzel',serif;">COSMIC</div>
+          </div>
+          <!-- Cover -->
+          <div style="flex:1;background:linear-gradient(135deg,#1A3828,#0d2018);border:1px solid rgba(123,196,154,0.5);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px;gap:4px;transform:rotateY(-8deg);box-shadow:4px 0 12px rgba(0,0,0,0.4);">
+            <div style="font-size:16px;">👩</div>
+            <div style="font-size:10px;color:#7BC49A;text-align:center;">⟡</div>
+            <div style="font-size:14px;">👨</div>
+            <div style="font-size:8px;color:rgba(255,255,255,0.3);font-family:'Cinzel',serif;letter-spacing:1px;margin-top:4px;">CC</div>
+          </div>
+        </div>
+        <!-- Book info -->
+        <div style="flex:1;padding:14px 12px;display:flex;flex-direction:column;justify-content:space-between;">
+          <div>
+            <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:#7BC49A;font-weight:700;margin-bottom:4px;">THE FAMILY BOOK</div>
+            <div style="font-style:italic;font-size:12px;color:rgba(240,215,120,0.7);margin-bottom:6px;">A keepsake for generations</div>
+            <div style="font-size:10px;color:rgba(200,180,140,0.65);line-height:1.5;">Every member · Compatibility map · Star chart · Pets included</div>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:6px;margin-top:10px;">
+            <div style="font-size:22px;font-weight:700;color:#F0D878;">$59.99</div>
+            <div style="font-size:11px;font-style:italic;color:rgba(212,168,67,0.5);">— the whole family</div>
+          </div>
+        </div>
+      </div>
+      <!-- Tap hint -->
+      <div style="background:rgba(0,0,0,0.2);border-top:1px solid rgba(123,196,154,0.25);padding:6px;text-align:center;font-family:'Cinzel',serif;font-size:7px;letter-spacing:3px;color:#7BC49A;">TAP TO SELECT</div>
+    </div>
+
+    <div class="plan-card" onclick="pick(this,'book_friendship',49.99,'The Friendship Book')" style="border-color:rgba(123,196,196,0.5);padding:0;overflow:hidden;position:relative;">
+      
+      <!-- Book visual preview -->
+      <div style="display:flex;align-items:stretch;min-height:120px;">
+        <!-- Book mockup -->
+        <div style="flex-shrink:0;width:80px;display:flex;align-items:stretch;perspective:400px;">
+          <!-- Spine -->
+          <div style="width:14px;background:#1A5050;display:flex;align-items:center;justify-content:center;">
+            <div style="font-size:6px;color:rgba(255,255,255,0.5);writing-mode:vertical-rl;letter-spacing:2px;font-family:'Cinzel',serif;">COSMIC</div>
+          </div>
+          <!-- Cover -->
+          <div style="flex:1;background:linear-gradient(135deg,#0d2830,#081820);border:1px solid rgba(123,196,196,0.5);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px;gap:4px;transform:rotateY(-8deg);box-shadow:4px 0 12px rgba(0,0,0,0.4);">
+            <div style="font-size:16px;">☽</div>
+            <div style="font-size:10px;color:#7BC4C4;text-align:center;">⟡</div>
+            <div style="font-size:14px;">♀</div>
+            <div style="font-size:8px;color:rgba(255,255,255,0.3);font-family:'Cinzel',serif;letter-spacing:1px;margin-top:4px;">CC</div>
+          </div>
+        </div>
+        <!-- Book info -->
+        <div style="flex:1;padding:14px 12px;display:flex;flex-direction:column;justify-content:space-between;">
+          <div>
+            <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:#7BC4C4;font-weight:700;margin-bottom:4px;">THE FRIENDSHIP BOOK</div>
+            <div style="font-style:italic;font-size:12px;color:rgba(240,215,120,0.7);margin-bottom:6px;">The perfect gift for a best friend</div>
+            <div style="font-size:10px;color:rgba(200,180,140,0.65);line-height:1.5;">Both full biographies · Signs · Planets · Numerology · Compatibility · What makes you work</div>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:6px;margin-top:10px;">
+            <div style="font-size:22px;font-weight:700;color:#F0D878;">$49.99</div>
+            <div style="font-size:11px;font-style:italic;color:rgba(212,168,67,0.5);">— two souls</div>
+          </div>
+        </div>
+      </div>
+      <!-- Tap hint -->
+      <div style="background:rgba(0,0,0,0.2);border-top:1px solid rgba(123,196,196,0.25);padding:6px;text-align:center;font-family:'Cinzel',serif;font-size:7px;letter-spacing:3px;color:#7BC4C4;">TAP TO SELECT</div>
+    </div>
+
+    <div class="plan-card" onclick="pick(this,'book_love',54.99,'The Love Book')" style="border-color:rgba(232,160,184,0.6);padding:0;overflow:hidden;position:relative;">
+      <div style="position:absolute;top:-10px;right:10px;background:linear-gradient(135deg,#C4A020,#8B6910);color:#fff;font-family:'Cinzel',serif;font-size:6px;letter-spacing:2px;padding:4px 10px;border-radius:10px;">MOST POPULAR GIFT</div>
+      <!-- Book visual preview -->
+      <div style="display:flex;align-items:stretch;min-height:120px;">
+        <!-- Book mockup -->
+        <div style="flex-shrink:0;width:80px;display:flex;align-items:stretch;perspective:400px;">
+          <!-- Spine -->
+          <div style="width:14px;background:#8B2A50;display:flex;align-items:center;justify-content:center;">
+            <div style="font-size:6px;color:rgba(255,255,255,0.5);writing-mode:vertical-rl;letter-spacing:2px;font-family:'Cinzel',serif;">COSMIC</div>
+          </div>
+          <!-- Cover -->
+          <div style="flex:1;background:linear-gradient(135deg,#3a1020,#200810);border:1px solid rgba(232,160,184,0.6);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px;gap:4px;transform:rotateY(-8deg);box-shadow:4px 0 12px rgba(0,0,0,0.4);">
+            <div style="font-size:16px;">♀</div>
+            <div style="font-size:10px;color:#E8A0B8;text-align:center;">⟡</div>
+            <div style="font-size:14px;">☽</div>
+            <div style="font-size:8px;color:rgba(255,255,255,0.3);font-family:'Cinzel',serif;letter-spacing:1px;margin-top:4px;">CC</div>
+          </div>
+        </div>
+        <!-- Book info -->
+        <div style="flex:1;padding:14px 12px;display:flex;flex-direction:column;justify-content:space-between;">
+          <div>
+            <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:#E8A0B8;font-weight:700;margin-bottom:4px;">THE LOVE BOOK</div>
+            <div style="font-style:italic;font-size:12px;color:rgba(240,215,120,0.7);margin-bottom:6px;">The most beautiful gift you can give</div>
+            <div style="font-size:10px;color:rgba(200,180,140,0.65);line-height:1.5;">Both full biographies · Venus · Moon · Numerology · Soul contract · Love compatibility</div>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:6px;margin-top:10px;">
+            <div style="font-size:22px;font-weight:700;color:#F0D878;">$54.99</div>
+            <div style="font-size:11px;font-style:italic;color:rgba(212,168,67,0.5);">— written in the stars</div>
+          </div>
+        </div>
+      </div>
+      <!-- Tap hint -->
+      <div style="background:rgba(0,0,0,0.2);border-top:1px solid rgba(232,160,184,0.6);padding:6px;text-align:center;font-family:'Cinzel',serif;font-size:7px;letter-spacing:3px;color:#E8A0B8;">TAP TO SELECT</div>
+    </div>
+    </div>
+
+  </div>
+
+    <p style="text-align:center;font-style:italic;font-size:12px;color:rgba(220,200,160,0.85);padding:8px 16px 80px;">🔒 Secure payment by Stripe · All cards · Apple Pay · Google Pay</p>
+
+  <!-- CART -->
+  <div class="cart-bar" id="cart">
+    <div class="cart-left">
+      <div class="cart-label" id="cart-label">No plan selected</div>
+      <div class="cart-total" id="cart-total">$0.00</div>
+    </div>
+    <button class="cart-btn" id="cart-btn" onclick="cartContinue()" disabled>CONTINUE ✦</button>
+  </div>
+</div>
+
+<!-- FORM -->
+<div id="form" class="screen">
+  <div class="page-head">
+    <h2>Tell Us Who You Are</h2>
+    <p>Enter your details below and we will read the exact sky on the moment you arrived — and tell you the story that was written into you before you took your first breath.</p>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;">
+      <button onclick="document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');}); document.getElementById('land').classList.add('on'); window.scrollTo(0,0);" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:#D4A843;background:transparent;border:1px solid rgba(212,168,67,0.3);padding:7px 16px;cursor:pointer;border-radius:3px;">🏠 HOME</button>
+      <button onclick="document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');}); document.getElementById('price').classList.add('on'); window.scrollTo(0,0);" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:#D4A843;background:transparent;border:1px solid rgba(212,168,67,0.3);padding:7px 16px;cursor:pointer;border-radius:3px;">← BACK</button>
+    </div>
+  </div>
+  <div class="form-body">
+    <label class="form-label">YOUR FULL NAME</label>
+    <input class="form-input" type="text" id="f-name" placeholder="As it appears on your birth certificate"/>
+    <div class="form-row">
+      <div><label class="form-label">DATE OF BIRTH</label><input class="form-input" type="date" id="f-dob"/></div>
+      <div><label class="form-label">TIME OF BIRTH</label><input class="form-input" type="time" id="f-tob"/></div>
+    </div>
+    <label class="form-label">CITY OF BIRTH</label>
+    <input class="form-input" type="text" id="f-city" placeholder="e.g. Baton Rouge"/>
+    <label class="form-label">STATE / COUNTRY</label>
+    <input class="form-input" type="text" id="f-country" placeholder="e.g. Louisiana, USA"/>
+    <label class="form-label">WHAT DO YOU MOST WANT TO UNDERSTAND?</label>
+    <input class="form-input" type="text" id="f-q" placeholder="e.g. my purpose, why I love so deeply..."/>
+
+    <div class="form-divider"></div>
+
+    <div class="toggle-head" id="partner-toggle" onclick="tog('partner','parr')" style="margin-top:8px;">
+      <span>✦ &nbsp; ADD SOMEONE FOR COMPATIBILITY &nbsp; (OPTIONAL)</span>
+      <span class="arr" id="parr">▼</span>
+    </div>
+    <div class="collapse" id="partner">
+
+      <!-- Relationship type choice -->
+      <div style="margin-bottom:14px;">
+        <label class="form-label">WHAT KIND OF COMPATIBILITY?</label>
+        <div style="display:flex;gap:8px;margin-top:6px;">
+          <div id="compat-love" onclick="setCompatType('love')" style="flex:1;padding:10px;text-align:center;border-radius:6px;cursor:pointer;border:1.5px solid rgba(212,168,67,0.3);background:rgba(10,20,45,0.8);transition:all .25s;">
+            <div style="font-size:20px;margin-bottom:4px;">💗</div>
+            <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:#D4A843;">LOVE</div>
+          </div>
+          <div id="compat-friend" onclick="setCompatType('friend')" style="flex:1;padding:10px;text-align:center;border-radius:6px;cursor:pointer;border:1.5px solid rgba(212,168,67,0.3);background:rgba(10,20,45,0.8);transition:all .25s;">
+            <div style="font-size:20px;margin-bottom:4px;">🤝</div>
+            <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:#D4A843;">FRIENDSHIP</div>
+          </div>
+        </div>
+        <div id="compat-type-label" style="font-style:italic;font-size:12px;color:rgba(212,168,67,0.5);text-align:center;margin-top:8px;">Choose love or friendship compatibility above</div>
+      </div>
+
+      <label class="form-label" id="pname-label">THEIR FULL NAME</label>
+      <input class="form-input" type="text" id="f-pname" placeholder="Their full name"/>
+      <div class="form-row">
+        <div><label class="form-label">DATE OF BIRTH</label><input class="form-input" type="date" id="f-pdob"/></div>
+        <div><label class="form-label">BIRTH TIME</label><input class="form-input" type="time" id="f-ptob"/></div>
+      </div>
+      <label class="form-label">CITY OF BIRTH</label>
+      <input class="form-input" type="text" id="f-pcity" placeholder="City"/>
+      <label class="form-label">STATE / COUNTRY</label>
+      <input class="form-input" type="text" id="f-pcountry" placeholder="e.g. Louisiana, USA"/>
+      <div id="duration-wrap">
+        <label class="form-label" id="duration-label">HOW LONG TOGETHER?</label>
+        <input class="form-input" type="text" id="f-pdur" placeholder="e.g. 3 years"/>
+      </div>
+    </div>
+
+    <!-- Book options - copies + wall art (only for book plans) -->
+    <div id="book-options" style="display:none;background:rgba(10,20,45,0.85);border:1px solid rgba(212,168,67,0.3);border-radius:8px;padding:14px;margin-bottom:14px;">
+      <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:#E8A0B8;margin-bottom:12px;">📖 BOOK OPTIONS</div>
+
+      <label class="form-label">HOW MANY COPIES?</label>
+      <div style="display:flex;gap:6px;margin-bottom:12px;">
+        <div class="copy-btn on" id="copy-1" onclick="setCopies(1,this)">1</div>
+        <div class="copy-btn" id="copy-2" onclick="setCopies(2,this)">2</div>
+        <div class="copy-btn" id="copy-3" onclick="setCopies(3,this)">3</div>
+        <div class="copy-btn" id="copy-4" onclick="setCopies(4,this)">4</div>
+        <div class="copy-btn" id="copy-5" onclick="setCopies(5,this)">5+</div>
+      </div>
+
+      <label class="form-label">ADD BIRTH CHART WALL ART? <span style="color:#D4A843;font-size:10px;">+$19.99 per print</span></label>
+      <div style="display:flex;gap:8px;margin-top:6px;">
+        <div class="wallart-btn on" id="wa-no" onclick="setWallArt(false,this)">No thanks</div>
+        <div class="wallart-btn" id="wa-yes" onclick="setWallArt(true,this)">✦ Add Wall Art</div>
+      </div>
+      <div id="wa-copies-wrap" style="display:none;margin-top:10px;">
+        <label class="form-label">WALL ART COPIES?</label>
+        <div style="display:flex;gap:6px;margin-top:4px;">
+          <div class="copy-btn on" id="wc-1" onclick="setWallArtCopies(1,this)">1</div>
+          <div class="copy-btn" id="wc-2" onclick="setWallArtCopies(2,this)">2</div>
+          <div class="copy-btn" id="wc-3" onclick="setWallArtCopies(3,this)">3</div>
+        </div>
+      </div>
+
+      <!-- SHIPPING ADDRESS -->
+      <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(212,168,67,0.15);">
+        <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:3px;color:#D4A843;margin-bottom:10px;">📦 SHIPPING ADDRESS</div>
+        <label class="form-label">FULL NAME (on package)</label>
+        <input class="form-input" type="text" id="ship-name" placeholder="Name for shipping label"/>
+        <label class="form-label">STREET ADDRESS</label>
+        <input class="form-input" type="text" id="ship-street" placeholder="Street address"/>
+        <label class="form-label">APARTMENT / SUITE (optional)</label>
+        <input class="form-input" type="text" id="ship-apt" placeholder="Apt, Suite, Unit (optional)"/>
+        <div class="form-row">
+          <div><label class="form-label">CITY</label><input class="form-input" type="text" id="ship-city" placeholder="City"/></div>
+          <div><label class="form-label">STATE</label><input class="form-input" type="text" id="ship-state" placeholder="State"/></div>
+        </div>
+        <div class="form-row">
+          <div><label class="form-label">ZIP CODE</label><input class="form-input" type="text" id="ship-zip" placeholder="Zip code"/></div>
+          <div><label class="form-label">COUNTRY</label><input class="form-input" type="text" id="ship-country" placeholder="Country"/></div>
+        </div>
+        <label class="form-label">PHONE (for delivery)</label>
+        <input class="form-input" type="tel" id="ship-phone" placeholder="Phone number"/>
+      </div>
+    </div>
+
+    <button class="btn-generate" id="gen-btn" onclick="generate()">✦ &nbsp; REVEAL MY COSMIC STORY &nbsp; ✦</button>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div id="load" class="screen">
+  <div class="load-spin">✦</div>
+  <div class="load-title" id="load-t">Reading the sky on the morning you arrived…</div>
+  <div class="load-sub" id="load-s">The planets are being placed. Your story is being written.</div>
+  <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+</div>
+
+<!-- RESULT -->
+<div id="result" class="screen">
+  <div class="result-cover">
+    <div class="result-cover-eye">✦ &nbsp; COSMIC CONCEPTION &nbsp; ✦</div>
+    <div class="result-cover-name" id="r-name">—</div>
+    <div class="result-cover-sign" id="r-sign">—</div>
+    <div class="result-cover-details" id="r-details"></div>
+    <div id="r-shipping"></div>
+  </div>
+  <div class="result-body" id="r-body"></div>
+  <div class="addon-tabs" id="addon-tabs" style="display:none">
+    <div class="addon-tabs-title">Your Cosmic Toolkit</div>
+    <p class="addon-tabs-sub">Tap any tool below</p>
+    <div class="tab-nav" id="tab-nav"></div>
+    <div id="tab-panels"></div>
+  </div>
+  <div class="result-actions">
+    <button class="act-btn" onclick="document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');}); document.getElementById('land').classList.add('on'); window.scrollTo(0,0);">🏠 HOME</button>
+    <button class="act-btn" onclick="document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');}); document.getElementById('price').classList.add('on'); window.scrollTo(0,0);">✦ NEW READING</button>
+    <button class="act-btn" onclick="window.print()">SAVE PDF</button>
+    <button class="act-btn primary" onclick="doShare()">SHARE ✦</button>
+  </div>
+  <!-- Book order export — only shown for book plans -->
+  <div id="book-export-wrap" style="display:none;margin:12px 16px 24px;background:rgba(10,20,45,0.9);border:1px solid rgba(212,168,67,0.35);border-radius:8px;padding:14px;text-align:center;">
+    <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:3px;color:#E8A0B8;margin-bottom:8px;">📖 BOOK ORDER</div>
+    <div style="font-style:italic;font-size:12px;color:rgba(220,200,160,0.8);margin-bottom:12px;">Generate their personalized book PDF — then upload it to Lulu to print and ship.</div>
+    <button onclick="generateBookPDF()" id="gen-book-btn" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:#fff;background:linear-gradient(135deg,#C46888,#8B2A50);border:none;padding:14px 24px;border-radius:4px;cursor:pointer;width:100%;">📖 &nbsp; GENERATE BOOK PDF</button>
+    <div id="book-pdf-status" style="margin-top:10px;font-style:italic;font-size:11px;color:rgba(212,168,67,0.7);display:none;">Building your book...</div>
+  </div>
+</div>
+
+<!-- FAMILY CONSTELLATION SCREEN -->
+<div id="family-screen" class="screen">
+  <div class="page-head" style="background:rgba(10,20,45,0.6);">
+    <h2 style="color:#E8A0B8;">✦ Family Constellation</h2>
+    <p>Add every member of your family — including pets. We will map all your cosmic connections and create a beautiful family star chart.</p>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;">
+      <button onclick="document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');}); document.getElementById('land').classList.add('on'); window.scrollTo(0,0);" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:#D4A843;background:transparent;border:1px solid rgba(212,168,67,0.3);padding:7px 16px;cursor:pointer;border-radius:3px;">🏠 HOME</button>
+      <button onclick="document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');}); document.getElementById('price').classList.add('on'); window.scrollTo(0,0);" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:#D4A843;background:transparent;border:1px solid rgba(212,168,67,0.3);padding:7px 16px;cursor:pointer;border-radius:3px;">← BACK</button>
+    </div>
+  </div>
+  <div style="padding:20px 16px 0;">
+    <div id="family-members-list"></div>
+    <button class="add-member-btn" onclick="showAddMember()">+ Add a Family Member or Pet</button>
+    <div id="add-member-modal" style="display:none;background:rgba(10,20,45,0.95);border:1.5px solid rgba(212,168,67,.4);border-radius:10px;padding:18px;margin-bottom:16px;">
+      <div style="font-weight:700;font-size:17px;color:#F0D878;margin-bottom:12px;">Who are you adding?</div>
+      <div class="member-type-grid">
+        <div class="mt-btn" onclick="setMemberType('👩','Mother','person',this)"><span class="mt-emoji">👩</span><span class="mt-label">MOTHER</span></div>
+        <div class="mt-btn" onclick="setMemberType('👨','Father','person',this)"><span class="mt-emoji">👨</span><span class="mt-label">FATHER</span></div>
+        <div class="mt-btn" onclick="setMemberType('🧒','Child','person',this)"><span class="mt-emoji">🧒</span><span class="mt-label">CHILD</span></div>
+        <div class="mt-btn" onclick="setMemberType('👦','Son','person',this)"><span class="mt-emoji">👦</span><span class="mt-label">SON</span></div>
+        <div class="mt-btn" onclick="setMemberType('👧','Daughter','person',this)"><span class="mt-emoji">👧</span><span class="mt-label">DAUGHTER</span></div>
+        <div class="mt-btn" onclick="setMemberType('👴','Grandfather','person',this)"><span class="mt-emoji">👴</span><span class="mt-label">GRANDFATHER</span></div>
+        <div class="mt-btn" onclick="setMemberType('👵','Grandmother','person',this)"><span class="mt-emoji">👵</span><span class="mt-label">GRANDMOTHER</span></div>
+        <div class="mt-btn" onclick="setMemberType('👫','Partner','person',this)"><span class="mt-emoji">👫</span><span class="mt-label">PARTNER</span></div>
+        <div class="mt-btn" onclick="setMemberType('🧑','Brother','person',this)"><span class="mt-emoji">🧑</span><span class="mt-label">BROTHER</span></div>
+        <div class="mt-btn" onclick="setMemberType('👩','Sister','person',this)"><span class="mt-emoji">👩</span><span class="mt-label">SISTER</span></div>
+        <div class="mt-btn" onclick="setMemberType('👶','Grandchild','person',this)"><span class="mt-emoji">👶</span><span class="mt-label">GRANDCHILD</span></div>
+        <div class="mt-btn" onclick="setMemberType('🧒','Niece/Nephew','person',this)"><span class="mt-emoji">🧒</span><span class="mt-label">NIECE/NEPHEW</span></div>
+        <div class="mt-btn" onclick="setMemberType('🐕','Dog','pet',this)"><span class="mt-emoji">🐕</span><span class="mt-label">DOG</span></div>
+        <div class="mt-btn" onclick="setMemberType('🐈','Cat','pet',this)"><span class="mt-emoji">🐈</span><span class="mt-label">CAT</span></div>
+        <div class="mt-btn" onclick="setMemberType('🐾','Other Pet','pet',this)"><span class="mt-emoji">🐾</span><span class="mt-label">OTHER PET</span></div>
+      </div>
+      <div id="member-form" style="display:none;margin-top:12px;">
+        <label class="form-label">NAME</label>
+        <input class="form-input" type="text" id="m-name" placeholder="Their name"/>
+        <div id="human-fields">
+          <div class="form-row">
+            <div><label class="form-label">DATE OF BIRTH</label><input class="form-input" type="date" id="m-dob"/></div>
+            <div><label class="form-label">TIME OF BIRTH</label><input class="form-input" type="time" id="m-tob"/></div>
+          </div>
+          <label class="form-label">CITY OF BIRTH</label>
+          <input class="form-input" type="text" id="m-city" placeholder="City"/>
+          <label class="form-label">STATE / COUNTRY</label>
+          <input class="form-input" type="text" id="m-state" placeholder="e.g. Louisiana, USA"/>
+        </div>
+        <div id="pet-fields" style="display:none;">
+          <label class="form-label">DATE OF BIRTH (if known)</label>
+          <input class="form-input" type="date" id="m-pdob"/>
+          <label class="form-label">BREED / TYPE</label>
+          <input class="form-input" type="text" id="m-breed" placeholder="e.g. Golden Retriever, Tabby Cat"/>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:6px;">
+          <button style="flex:1;padding:13px;background:rgba(10,20,45,0.8);border:1px solid rgba(184,146,14,.2);color:rgba(220,200,160,0.85);font-style:italic;cursor:pointer;border-radius:4px;" onclick="cancelAddMember()">Cancel</button>
+          <button class="btn-generate" style="flex:2;margin-top:0;padding:13px;" onclick="saveMember()">✦ Add to Family</button>
+        </div>
+      </div>
+    </div>
+    <div id="family-generate-section" style="display:none;">
+      <div style="background:rgba(240,232,212,0.82);border:1px solid rgba(184,146,14,.2);border-radius:8px;padding:16px;margin-bottom:14px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:8px;" id="fam-emoji-row">👨‍👩‍👧‍👦</div>
+        <div style="font-weight:700;color:#F0D878;font-size:16px;margin-bottom:4px;" id="fam-summary">Your family constellation is ready</div>
+        <div style="font-style:italic;font-size:13px;color:rgba(220,200,160,0.85);">We will generate individual readings for each person and map all your cosmic connections</div>
+      </div>
+      <button class="gen-family-btn" onclick="generateFamily()">✦ &nbsp; GENERATE OUR FAMILY CONSTELLATION &nbsp; ✦</button>
+    </div>
+  </div>
+</div>
+
+<!-- FAMILY RESULT -->
+<div id="family-result" class="screen">
+  <div class="page-head" style="background:rgba(10,20,45,0.6);">
+    <div style="font-size:28px;margin-bottom:6px;">✨</div>
+    <h2 style="color:#E8A0B8;">Your Family Constellation</h2>
+    <p id="fam-result-names" style="color:rgba(220,200,160,0.85);font-style:italic;font-size:13px;"></p>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;">
+      <button onclick="document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');}); document.getElementById('land').classList.add('on'); window.scrollTo(0,0);" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:#D4A843;background:transparent;border:1px solid rgba(212,168,67,0.3);padding:7px 16px;cursor:pointer;border-radius:3px;">🏠 HOME</button>
+      <button onclick="document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');}); document.getElementById('family-screen').classList.add('on'); window.scrollTo(0,0);" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:#D4A843;background:transparent;border:1px solid rgba(212,168,67,0.3);padding:7px 16px;cursor:pointer;border-radius:3px;">← BACK</button>
+    </div>
+  </div>
+  <div style="padding:16px;">
+    <div style="font-family:Arial,sans-serif;font-size:9px;letter-spacing:4px;color:#D4A843;text-align:center;margin-bottom:10px;">✦ YOUR FAMILY STAR MAP ✦</div>
+    <div class="constellation-wrap"><canvas id="constellation-canvas" width="400" height="400"></canvas></div>
+    <div id="constellation-legend" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px;padding:8px;"></div>
+    <button class="wall-art-btn" onclick="downloadWallArt()">🎨 &nbsp; SAVE AS WALL ART &nbsp; ✦</button>
+  </div>
+  <div style="padding:0 16px 16px;">
+    <div style="font-family:Arial,sans-serif;font-size:9px;letter-spacing:4px;color:#D4A843;text-align:center;margin-bottom:12px;">✦ COMPATIBILITY MAP ✦</div>
+    <div class="tool-card" id="compat-table"></div>
+  </div>
+  <div style="padding:0 16px;">
+    <div style="font-family:Arial,sans-serif;font-size:9px;letter-spacing:4px;color:#D4A843;text-align:center;margin-bottom:12px;">✦ YOUR FAMILY SOUL STORY ✦</div>
+    <div class="result-body" id="family-story" style="padding:20px;background:rgba(10,20,45,0.7);border-radius:8px;border:1px solid rgba(212,168,67,.3);color:#F0D878;"></div>
+  </div>
+  <div class="result-actions" style="margin-top:16px;">
+    <button class="act-btn" onclick="document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');}); document.getElementById('land').classList.add('on'); window.scrollTo(0,0);">🏠 HOME</button>
+    <button class="act-btn" onclick="window.print()">PRINT / SAVE</button>
+    <button class="act-btn primary" onclick="doShare()">SHARE ✦</button>
+  </div>
+</div>
+
+<script>
+// ── NAV ──
+function go(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');});
+  var el=document.getElementById(id);
+  if(!el) return;
+  el.classList.add('on');
+  document.documentElement.scrollTop=0;
+  document.body.scrollTop=0;
+  if(id==='land') resetAll();
+  // Hide cart bar on every screen except pricing
+  var cart=document.getElementById('cart');
+  if(cart) cart.classList.toggle('show', id==='price');
+}
+
+// Wire discover button on page load
+window.addEventListener('load',function(){
+  var btn=document.getElementById('discoverBtn');
+  if(btn) btn.addEventListener('click',function(){ go('price'); });
+});
+
+function resetAll(){
+  // Reset plan selection
+  selPlan=null;
+  selAddons={};
+  document.querySelectorAll('.plan-card').forEach(c=>c.classList.remove('sel'));
+  document.querySelectorAll('.addon-card').forEach(c=>c.classList.remove('sel'));
+  var cart=document.getElementById('cart');
+  if(cart){cart.classList.remove('show');}
+  var cb=document.getElementById('cart-btn');
+  if(cb){cb.disabled=true;}
+  var cl=document.getElementById('cart-label');
+  if(cl){cl.textContent='No plan selected';}
+  var ct=document.getElementById('cart-total');
+  if(ct){ct.textContent='$0.00';}
+
+  // Reset form fields
+  var fields=['f-name','f-dob','f-tob','f-city','f-country','f-q',
+              'f-pname','f-pdob','f-ptob','f-pcity','f-pcountry','f-pdur'];
+  fields.forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+
+  // Close partner section
+  var partner=document.getElementById('partner');
+  if(partner)partner.classList.remove('open');
+  var parr=document.getElementById('parr');
+  if(parr)parr.classList.remove('open');
+
+  // Re-enable generate button
+  var gb=document.getElementById('gen-btn');
+  if(gb)gb.disabled=false;
+
+  // Clear result body
+  var rb=document.getElementById('r-body');
+  if(rb)rb.innerHTML='';
+  var tabs=document.getElementById('addon-tabs');
+  if(tabs){tabs.style.display='none';}
+
+  // Reset family
+  familyMembers=[];
+  renderFamilyList();
+}
+
+// ── FAMILY CONSTELLATION ──
+var familyMembers=[];
+var curMemberType={emoji:'',role:'',type:'person'};
+
+function showAddMember(){document.getElementById('add-member-modal').style.display='block';document.getElementById('member-form').style.display='none';document.querySelectorAll('.mt-btn').forEach(b=>b.classList.remove('sel'));}
+function cancelAddMember(){document.getElementById('add-member-modal').style.display='none';}
+
+function setMemberType(emoji,role,type,btn){
+  curMemberType={emoji,role,type};
+  document.querySelectorAll('.mt-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  document.getElementById('member-form').style.display='block';
+  document.getElementById('human-fields').style.display=type==='person'?'block':'none';
+  document.getElementById('pet-fields').style.display=type==='pet'?'block':'none';
+  document.getElementById('m-name').placeholder=type==='pet'?'Pet\'s name':'Their name';
+}
+
+function saveMember(){
+  var name=document.getElementById('m-name').value.trim();
+  if(!name){alert('Please enter a name.');return;}
+  var member={emoji:curMemberType.emoji,role:curMemberType.role,type:curMemberType.type,name:name};
+  if(curMemberType.type==='person'){
+    member.dob=document.getElementById('m-dob').value;
+    member.tob=document.getElementById('m-tob').value;
+    member.city=document.getElementById('m-city').value.trim();
+    member.state=document.getElementById('m-state').value.trim();
+    if(member.dob){var p=member.dob.split('-').map(Number);member.sun=sun(p[1],p[2]);member.nums=nums(name,member.dob);}
+  } else {
+    member.dob=document.getElementById('m-pdob').value;
+    member.breed=document.getElementById('m-breed').value.trim();
+  }
+  familyMembers.push(member);
+  document.getElementById('m-name').value='';
+  document.getElementById('m-dob').value='';
+  document.getElementById('m-tob').value='';
+  document.getElementById('m-city').value='';
+  document.getElementById('m-state').value='';
+  document.getElementById('m-pdob').value='';
+  document.getElementById('m-breed').value='';
+  document.getElementById('add-member-modal').style.display='none';
+  renderFamilyList();
+}
+
+function removeMember(idx){familyMembers.splice(idx,1);renderFamilyList();}
+
+function renderFamilyList(){
+  var list=document.getElementById('family-members-list');
+  list.innerHTML=familyMembers.map((m,i)=>`
+    <div class="family-member-card${m.type==='pet'?' pet':''}">
+      <div class="fm-header">
+        <div><span style="font-size:24px;margin-right:8px;">${m.emoji}</span><span class="fm-title">${m.name}</span><span style="font-size:12px;color:rgba(220,200,160,0.85);margin-left:8px;font-style:italic;">${m.role}</span></div>
+        <button class="fm-remove" onclick="removeMember(${i})">✕</button>
+      </div>
+      ${m.dob?`<div style="font-style:italic;font-size:13px;color:#D4A843;">${m.sun?m.sun.sign+' · ':''}${m.dob}${m.city?' · '+m.city:''}${m.state?', '+m.state:''}${m.nums?' · Life Path '+m.nums.lp:''}</div>`:''}
+      ${m.breed?`<div style="font-style:italic;font-size:13px;color:#2A5838;">${m.breed}</div>`:''}
+    </div>
+  `).join('');
+  var sec=document.getElementById('family-generate-section');
+  if(familyMembers.length>=2){
+    sec.style.display='block';
+    document.getElementById('fam-emoji-row').textContent=familyMembers.map(m=>m.emoji).join(' ');
+    document.getElementById('fam-summary').textContent=familyMembers.length+' family members ready to be mapped';
+  } else sec.style.display='none';
+}
+
+async function generateFamily(){
+  if(familyMembers.length<2){alert('Please add at least 2 family members.');return;}
+  document.querySelector('.gen-family-btn').disabled=true;
+  document.querySelector('.gen-family-btn').textContent='Generating your family constellation…';
+  go('load'); startLoad();
+
+  var memberList=familyMembers.map(m=>`- ${m.emoji} ${m.name} (${m.role})${m.sun?' · Sun: '+m.sun.sign:''}${m.nums?' · Life Path: '+m.nums.lp:''}${m.breed?' · '+m.breed:''}`).join('\n');
+
+  var pairs=[];
+  for(var i=0;i<familyMembers.length;i++)for(var j=i+1;j<familyMembers.length;j++)pairs.push([familyMembers[i],familyMembers[j]]);
+
+  var prompt=`You are a gifted cosmic storyteller and astrologer. Write a beautiful Family Constellation Soul Story for this family. Write as flowing literary prose — no bullet points anywhere. 600 words maximum. Always complete every sentence and paragraph fully — never cut off mid-thought.
+
+FAMILY MEMBERS:
+${memberList}
+
+Write in this exact HTML format:
+
+<h2 style="color:#8B2A50;">The ${familyMembers.map(m=>m.name).join(' & ')} Family Constellation</h2>
+<h3>A cosmic portrait of your family soul</h3>
+<p class="drop">[Opening paragraph — who this family is as a collective soul, what energy they carry together, what the cosmos assembled when it brought these specific people and pets into each other's lives. Beautiful and personal.]</p>
+<p>[The family's collective gifts — what they are uniquely able to create and experience together]</p>
+<p>[The family's collective challenges — framed as growth opportunities and doorways]</p>
+<p>[What makes this family extraordinary and rare]</p>
+
+<hr>
+
+<h2 class="gold">Each Soul in the Constellation</h2>
+<h3>Individual portraits</h3>
+${familyMembers.map(m=>`<p>[Write 2-3 sentences about ${m.name} (${m.role}) — who they are in this family, what they bring, what makes them unique. ${m.sun?'Sun in '+m.sun.sign+'.':''} ${m.nums?'Life Path '+m.nums.lp+'.':''} ${m.breed?'A beloved '+m.breed+'.':''}]</p>`).join('\n')}
+
+<hr>
+
+<h2 class="rose">The Bonds Between You</h2>
+<h3>Your cosmic connections</h3>
+${pairs.map(([a,b])=>`<p>[Write 2 sentences about the cosmic bond between ${a.name} and ${b.name} — what their connection is, what they give each other, the specific energy of their relationship]</p>`).join('\n')}
+
+<hr>
+
+<h2 class="teal">Your Family's Soul Purpose</h2>
+<h3>What you came here to do together</h3>
+<p class="drop">[What is this family's collective purpose? What did the cosmos intend when it assembled these specific souls? What are they building together, what are they healing, what legacy are they creating? Write with warmth and depth.]</p>
+
+<div class="nb"><p><em>[One final luminous sentence — the most important thing the stars want this family to know about themselves]</em></p></div>
+
+CRITICAL: Flowing literary prose only. No bullet points. Warm, personal, and specific to these actual family members.`;
+
+  try{
+    var _ac=new AbortController();setTimeout(()=>_ac.abort(),55000);var res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',signal:_ac.signal,headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:800,messages:[{role:'user',content:prompt}]})});
+    var data=await res.json();
+    var story=data.content[0].text;
+    stopLoad();
+
+    // Set result
+    document.getElementById('fam-result-names').textContent=familyMembers.map(m=>m.emoji+' '+m.name).join(' · ');
+    document.getElementById('family-story').innerHTML=story;
+
+    // Draw constellation
+    drawConstellation();
+
+    // Build compatibility table
+    buildCompatTable();
+
+    go('family-result');
+  }catch(err){
+    stopLoad();
+    alert('Something went wrong. Please try again.');
+    go('family-screen');
+    document.querySelector('.gen-family-btn').disabled=false;
+    document.querySelector('.gen-family-btn').textContent='✦  GENERATE OUR FAMILY CONSTELLATION  ✦';
+  }
+}
+
+function drawConstellation(){
+  var canvas=document.getElementById('constellation-canvas');
+  if(!canvas)return;
+  var ctx=canvas.getContext('2d'),W=400,H=400,cx=200,cy=200;
+  ctx.clearRect(0,0,W,H);
+
+  // Deep space background
+  ctx.fillStyle='#080418';ctx.fillRect(0,0,W,H);
+
+  // ── ZODIAC WHEEL OUTER RING ──
+  var outerR=175, innerR=145, houseR=120;
+
+  // Outer ring fill
+  ctx.beginPath();ctx.arc(cx,cy,outerR,0,Math.PI*2);
+  ctx.fillStyle='rgba(45,26,96,0.6)';ctx.fill();
+  ctx.strokeStyle='rgba(212,168,67,0.6)';ctx.lineWidth=2;ctx.stroke();
+
+  // Inner ring
+  ctx.beginPath();ctx.arc(cx,cy,innerR,0,Math.PI*2);
+  ctx.strokeStyle='rgba(212,168,67,0.4)';ctx.lineWidth=1;ctx.stroke();
+
+  // House ring
+  ctx.beginPath();ctx.arc(cx,cy,houseR,0,Math.PI*2);
+  ctx.strokeStyle='rgba(212,168,67,0.25)';ctx.lineWidth=1;ctx.stroke();
+
+  // Center circle
+  ctx.beginPath();ctx.arc(cx,cy,18,0,Math.PI*2);
+  ctx.strokeStyle='rgba(212,168,67,0.5)';ctx.lineWidth=1.5;ctx.stroke();
+
+  // ── 12 ZODIAC SIGNS in outer ring ──
+  var zodSigns=['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+  var zodNames=['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+  var zodColors=['#E8A0B8','#D4A843','#7BC4C4','#89B4E8','#E8A0B8','#7BC49A','#C4A0D4','#E88080','#D4A843','#8080E8','#7BC4C4','#89B4E8'];
+
+  for(var z=0;z<12;z++){
+    var startA=(z/12)*Math.PI*2 - Math.PI/2;
+    var endA=((z+1)/12)*Math.PI*2 - Math.PI/2;
+    var midA=(startA+endA)/2;
+
+    // House division line
+    ctx.beginPath();
+    ctx.moveTo(cx+innerR*Math.cos(startA), cy+innerR*Math.sin(startA));
+    ctx.lineTo(cx+outerR*Math.cos(startA), cy+outerR*Math.sin(startA));
+    ctx.strokeStyle='rgba(212,168,67,0.35)';ctx.lineWidth=1;ctx.stroke();
+
+    // House line to center
+    ctx.beginPath();
+    ctx.moveTo(cx+18*Math.cos(startA), cy+18*Math.sin(startA));
+    ctx.lineTo(cx+houseR*Math.cos(startA), cy+houseR*Math.sin(startA));
+    ctx.strokeStyle='rgba(212,168,67,0.15)';ctx.lineWidth=0.5;ctx.stroke();
+
+    // Zodiac symbol
+    var symR=(innerR+outerR)/2;
+    ctx.font='13px serif';
+    ctx.fillStyle=zodColors[z];
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(zodSigns[z], cx+symR*Math.cos(midA), cy+symR*Math.sin(midA));
+
+    // House number
+    var hnR=(houseR+innerR)/2;
+    ctx.font='9px Cinzel,serif';
+    ctx.fillStyle='rgba(212,168,67,0.5)';
+    ctx.fillText(z+1, cx+hnR*Math.cos(midA), cy+hnR*Math.sin(midA));
+  }
+
+  // ── CUSPS (Asc, IC, Desc, MC) ──
+  var cuspLabels=[{a:0,l:'ASC'},{a:Math.PI/2,l:'IC'},{a:Math.PI,l:'DESC'},{a:-Math.PI/2,l:'MC'}];
+  cuspLabels.forEach(function(c){
+    ctx.beginPath();
+    ctx.moveTo(cx+houseR*Math.cos(c.a), cy+houseR*Math.sin(c.a));
+    ctx.lineTo(cx+outerR*Math.cos(c.a), cy+outerR*Math.sin(c.a));
+    ctx.strokeStyle='rgba(212,168,67,0.7)';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.font='bold 8px Cinzel,serif';
+    ctx.fillStyle='rgba(212,168,67,0.9)';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    var lr=outerR+12;
+    ctx.fillText(c.l, cx+lr*Math.cos(c.a), cy+lr*Math.sin(c.a));
+  });
+
+  // ── FAMILY MEMBERS as planetary nodes ──
+  var n=familyMembers.length;
+  var colors=['#D4A843','#C46888','#7BC49A','#89B4E8','#C4A0D4','#F4A460','#87CEEB','#DDA0DD','#98FB98','#F0E68C','#FFB6C1','#87CEEB'];
+  var positions=[];
+
+  familyMembers.forEach(function(m,i){
+    var angle=(i/n)*Math.PI*2-(Math.PI/2);
+    var r=houseR*0.72;
+    var x=cx+r*Math.cos(angle), y=cy+r*Math.sin(angle);
+    positions.push({x:x,y:y,color:colors[i%colors.length]});
+  });
+
+  // Draw aspect lines between family members
+  for(var a=0;a<n;a++){
+    for(var b=a+1;b<n;b++){
+      var pa=positions[a],pb=positions[b];
+      var compat=calcCompat(familyMembers[a],familyMembers[b]);
+      var alpha=0.08+(compat/100)*0.35;
+      ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);
+      ctx.strokeStyle='rgba(212,168,67,'+alpha.toFixed(2)+')';
+      ctx.lineWidth=compat>80?1.2:0.6;
+      ctx.setLineDash(compat>75?[]:[3,4]);
+      ctx.stroke();ctx.setLineDash([]);
+
+      // Compat % at midpoint
+      var mx=(pa.x+pb.x)/2, my=(pa.y+pb.y)/2;
+      ctx.font='7px Arial';
+      ctx.fillStyle='rgba(212,168,67,'+(alpha*2).toFixed(2)+')';
+      ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(compat+'%',mx,my);
+    }
+  }
+
+  // Draw member nodes
+  positions.forEach(function(p,i){
+    var m=familyMembers[i];
+    var nr=m.type==='pet'?9:11;
+
+    // Glow
+    var glow=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,nr*2.5);
+    glow.addColorStop(0,p.color+'66');glow.addColorStop(1,'transparent');
+    ctx.beginPath();ctx.arc(p.x,p.y,nr*2.5,0,Math.PI*2);ctx.fillStyle=glow;ctx.fill();
+
+    // Node
+    ctx.beginPath();ctx.arc(p.x,p.y,nr,0,Math.PI*2);
+    var ng=ctx.createRadialGradient(p.x-nr*.3,p.y-nr*.3,0,p.x,p.y,nr);
+    ng.addColorStop(0,p.color+'EE');ng.addColorStop(1,p.color+'66');
+    ctx.fillStyle=ng;ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,0.4)';ctx.lineWidth=1;ctx.stroke();
+
+    // Emoji
+    ctx.font=(m.type==='pet'?'10px':'11px')+' serif';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(m.emoji,p.x,p.y);
+
+    // Name
+    ctx.font='bold 8px Cormorant Garamond,Georgia,serif';
+    ctx.fillStyle='rgba(240,216,120,0.95)';
+    ctx.textAlign='center';ctx.textBaseline='top';
+    ctx.fillText(m.name,p.x,p.y+nr+2);
+
+    // Role
+    ctx.font='6px Arial';
+    ctx.fillStyle='rgba(212,168,67,0.6)';
+    ctx.fillText(m.role.toUpperCase(),p.x,p.y+nr+11);
+  });
+
+  // Center star
+  ctx.font='14px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillStyle='rgba(212,168,67,0.7)';ctx.fillText('✦',cx,cy);
+
+  // Update legend
+  var leg=document.getElementById('constellation-legend');
+  if(leg) leg.innerHTML=familyMembers.map(function(m,i){
+    return '<span style="display:flex;align-items:center;gap:4px;font-size:11px;color:rgba(240,216,120,.8);font-style:italic;"><span style="width:10px;height:10px;border-radius:50%;background:'+positions[i].color+';display:inline-block;flex-shrink:0;"></span>'+m.emoji+' '+m.name+' — '+m.role+'</span>';
+  }).join('');
+}
+
+function calcCompat(a,b){
+  if(!a.nums||!b.nums) return 72;
+  var diff=Math.abs(a.nums.lp-b.nums.lp);
+  return Math.min(99,62+(diff===0?30:diff<=2?18:diff<=4?10:4));
+}
+
+function buildCompatTable(){
+  var table=document.getElementById('compat-table');
+  var rows='';
+  for(var i=0;i<familyMembers.length;i++){
+    for(var j=i+1;j<familyMembers.length;j++){
+      var a=familyMembers[i],b=familyMembers[j];
+      var score=calcCompat(a,b);
+      var color=score>=85?'#27AE60':score>=70?'#B8920E':'#C46888';
+      rows+=`<div class="compat-line">
+        <div><div class="compat-names">${a.emoji} ${a.name} &amp; ${b.emoji} ${b.name}</div>
+        <div class="compat-bar"><div class="compat-fill" style="width:${score}%;background:${color};"></div></div></div>
+        <div class="compat-score" style="color:${color};">${score}%</div>
+      </div>`;
+    }
+  }
+  table.innerHTML=rows||'<p style="font-style:italic;color:rgba(220,200,160,0.85);text-align:center;">Add more family members to see compatibility</p>';
+}
+
+function downloadWallArt(){
+  var canvas=document.getElementById('constellation-canvas');
+  if(!canvas)return;
+  var link=document.createElement('a');
+  link.download='family-constellation-wall-art.png';
+  link.href=canvas.toDataURL('image/png',1.0);
+  link.click();
+}
+function tog(id,arrId){
+  document.getElementById(id).classList.toggle('open');
+  document.getElementById(arrId).classList.toggle('open');
+}
+
+// ── PLAN & ADDONS ──
+var selPlan=null, selAddons={};
+var bookCopies=1, wallArt=false, wallArtCopies=1;
+var compatType='love';
+
+function setCompatType(type){
+  compatType=type;
+  var loveBtn=document.getElementById('compat-love');
+  var friendBtn=document.getElementById('compat-friend');
+  var lbl=document.getElementById('compat-type-label');
+  var durLbl=document.getElementById('duration-label');
+  if(type==='love'){
+    if(loveBtn){loveBtn.style.borderColor='#C46888';loveBtn.style.background='rgba(139,42,80,0.3)';}
+    if(friendBtn){friendBtn.style.borderColor='rgba(212,168,67,0.3)';friendBtn.style.background='rgba(10,20,45,0.8)';}
+    if(lbl) lbl.textContent='Love compatibility — romantic relationship reading';
+    if(durLbl) durLbl.textContent='HOW LONG TOGETHER?';
+  } else {
+    if(friendBtn){friendBtn.style.borderColor='#7BC4C4';friendBtn.style.background='rgba(26,80,80,0.3)';}
+    if(loveBtn){loveBtn.style.borderColor='rgba(212,168,67,0.3)';loveBtn.style.background='rgba(10,20,45,0.8)';}
+    if(lbl) lbl.textContent='Friendship compatibility — how your souls connect';
+    if(durLbl) durLbl.textContent='HOW LONG FRIENDS?';
+  }
+}
+
+function setCopies(n, btn){
+  bookCopies=n;
+  document.querySelectorAll('.copy-btn[id^="copy-"]').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+}
+function setWallArt(val, btn){
+  wallArt=val;
+  document.querySelectorAll('.wallart-btn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  document.getElementById('wa-copies-wrap').style.display=val?'block':'none';
+}
+function setWallArtCopies(n, btn){
+  wallArtCopies=n;
+  document.querySelectorAll('.copy-btn[id^="wc-"]').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+}
+
+function showFamilyPreview(){
+  document.getElementById('family-preview-modal').style.display='block';
+  document.body.scrollTop=0;
+  drawFamilyPreview();
+}
+
+function hideFamilyPreview(){
+  document.getElementById('family-preview-modal').style.display='none';
+}
+
+function drawFamilyPreview(){
+  var canvas=document.getElementById('preview-canvas');
+  if(!canvas) return;
+  var W=canvas.width, H=canvas.height, ctx=canvas.getContext('2d');
+  var cx=W/2, cy=H/2;
+  var outerR=W*0.46, zodR=W*0.37, houseR=W*0.27, innerR=W*0.12;
+
+  ctx.clearRect(0,0,W,H);
+
+  // Deep space bg
+  var bg=ctx.createRadialGradient(cx,cy,0,cx,cy,outerR);
+  bg.addColorStop(0,'#0D0530'); bg.addColorStop(1,'#050215');
+  ctx.beginPath(); ctx.arc(cx,cy,outerR+4,0,Math.PI*2);
+  ctx.fillStyle=bg; ctx.fill();
+
+  // Stars
+  for(var s=0;s<80;s++){
+    var sx=cx+(Math.random()-0.5)*W*0.9, sy=cy+(Math.random()-0.5)*H*0.9;
+    if(Math.sqrt((sx-cx)*(sx-cx)+(sy-cy)*(sy-cy))>outerR) continue;
+    ctx.beginPath(); ctx.arc(sx,sy,Math.random()*1.2+0.2,0,Math.PI*2);
+    ctx.fillStyle='rgba(255,255,255,'+(Math.random()*0.5+0.1)+')'; ctx.fill();
+  }
+
+  // Zodiac signs & colors
+  var ZODIAC=[
+    {sym:'♈',c:'#FF6B6B'},{sym:'♉',c:'#D4A843'},{sym:'♊',c:'#F0E040'},
+    {sym:'♋',c:'#80C8FF'},{sym:'♌',c:'#FFB830'},{sym:'♍',c:'#90D890'},
+    {sym:'♎',c:'#C8A0E8'},{sym:'♏',c:'#E85050'},{sym:'♐',c:'#FF9040'},
+    {sym:'♑',c:'#8080C8'},{sym:'♒',c:'#40C8C8'},{sym:'♓',c:'#8090E8'}
+  ];
+
+  // Zodiac ring
+  for(var i=0;i<12;i++){
+    var sa=(i/12)*Math.PI*2-Math.PI/2, ea=((i+1)/12)*Math.PI*2-Math.PI/2, ma=(sa+ea)/2;
+    ctx.beginPath(); ctx.arc(cx,cy,outerR,sa,ea); ctx.arc(cx,cy,zodR,ea,sa,true); ctx.closePath();
+    ctx.fillStyle=ZODIAC[i].c+'18'; ctx.fill();
+    ctx.strokeStyle='rgba(212,168,67,0.25)'; ctx.lineWidth=0.7; ctx.stroke();
+    var sr=(zodR+outerR)/2;
+    ctx.font=Math.round(W*0.055)+'px serif';
+    ctx.fillStyle=ZODIAC[i].c; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.shadowColor=ZODIAC[i].c; ctx.shadowBlur=5;
+    ctx.fillText(ZODIAC[i].sym, cx+sr*Math.cos(ma), cy+sr*Math.sin(ma));
+    ctx.shadowBlur=0;
+  }
+
+  // Rings
+  [[outerR,'rgba(212,168,67,0.7)',1.5],[zodR,'rgba(212,168,67,0.3)',0.7],[houseR,'rgba(212,168,67,0.18)',0.7],[innerR,'rgba(212,168,67,0.25)',1]].forEach(function(r){
+    ctx.beginPath(); ctx.arc(cx,cy,r[0],0,Math.PI*2); ctx.strokeStyle=r[1]; ctx.lineWidth=r[2]; ctx.stroke();
+  });
+
+  // House lines
+  for(var h=0;h<12;h++){
+    var ha=(h/12)*Math.PI*2-Math.PI/2;
+    ctx.beginPath(); ctx.moveTo(cx+innerR*Math.cos(ha),cy+innerR*Math.sin(ha));
+    ctx.lineTo(cx+zodR*Math.cos(ha),cy+zodR*Math.sin(ha));
+    ctx.strokeStyle=(h%3===0)?'rgba(212,168,67,0.55)':'rgba(212,168,67,0.15)';
+    ctx.lineWidth=(h%3===0)?1.5:0.5; ctx.stroke();
+    // house number
+    var hnR=(innerR+houseR)*0.55, hma=((h+0.5)/12)*Math.PI*2-Math.PI/2;
+    ctx.font=Math.round(W*0.02)+'px Cinzel,serif';
+    ctx.fillStyle='rgba(212,168,67,0.45)'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(h+1, cx+hnR*Math.cos(hma), cy+hnR*Math.sin(hma));
+  }
+
+  // Sample family members as glowing nodes
+  var members=[
+    {name:'Mom',emoji:'👩',color:'#E8A0B8',deg:15},
+    {name:'Dad',emoji:'👨',color:'#7BC4C4',deg:135},
+    {name:'You',emoji:'⭐',color:'#D4A843',deg:255},
+    {name:'Child',emoji:'🧒',color:'#90D890',deg:75},
+    {name:'Grandma',emoji:'👵',color:'#C8A0E8',deg:195},
+    {name:'Dog',emoji:'🐕',color:'#FFB830',deg:315},
+  ];
+
+  // Aspect lines between members
+  for(var a=0;a<members.length;a++){
+    for(var b2=a+1;b2<members.length;b2++){
+      var ma2=members[a], mb=members[b2];
+      var aa=(ma2.deg/360)*Math.PI*2-Math.PI/2;
+      var ab=(mb.deg/360)*Math.PI*2-Math.PI/2;
+      var r2=innerR*0.8;
+      ctx.beginPath();
+      ctx.moveTo(cx+r2*Math.cos(aa), cy+r2*Math.sin(aa));
+      ctx.lineTo(cx+r2*Math.cos(ab), cy+r2*Math.sin(ab));
+      var alpha=0.15+Math.random()*0.2;
+      ctx.strokeStyle='rgba(212,168,67,'+alpha.toFixed(2)+')';
+      ctx.lineWidth=0.6; ctx.setLineDash([3,3]); ctx.stroke(); ctx.setLineDash([]);
+    }
+  }
+
+  // Member nodes
+  members.forEach(function(m){
+    var angle=(m.deg/360)*Math.PI*2-Math.PI/2;
+    var r3=innerR*0.78;
+    var mx=cx+r3*Math.cos(angle), my=cy+r3*Math.sin(angle);
+
+    // Glow
+    var glow=ctx.createRadialGradient(mx,my,0,mx,my,W*0.06);
+    glow.addColorStop(0,m.color+'55'); glow.addColorStop(1,'transparent');
+    ctx.beginPath(); ctx.arc(mx,my,W*0.06,0,Math.PI*2);
+    ctx.fillStyle=glow; ctx.fill();
+
+    // Node symbol
+    ctx.font=Math.round(W*0.04)+'px serif';
+    ctx.fillStyle=m.color; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.shadowColor=m.color; ctx.shadowBlur=10;
+    ctx.fillText(m.emoji, mx, my); ctx.shadowBlur=0;
+
+    // Name
+    ctx.font='bold '+Math.round(W*0.025)+'px Cormorant Garamond,serif';
+    ctx.fillStyle='rgba(240,215,120,0.85)';
+    ctx.textBaseline='top';
+    ctx.fillText(m.name, mx, my+W*0.025);
+  });
+
+  // Center star
+  ctx.font=Math.round(W*0.06)+'px serif';
+  ctx.fillStyle='rgba(212,168,67,0.25)';
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('✦',cx,cy);
+}
+
+function pickBook(el, id, price, name){
+  document.querySelectorAll('.book-type-card').forEach(function(c){c.classList.remove('sel');});
+  el.classList.add('sel');
+  selPlan={id:id,price:price,name:name};
+
+  // Show confirm button
+  var confirmBtn=document.getElementById('book-confirm-btn');
+  if(confirmBtn){
+    confirmBtn.style.display='block';
+    confirmBtn.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+
+  // Update cart
+  updateCart();
+  var cart=document.getElementById('cart');
+  var cartBtn=document.getElementById('cart-btn');
+  if(cart) cart.classList.add('show');
+  if(cartBtn){
+    cartBtn.disabled=false;
+    cartBtn.textContent='ORDER BOOK ✦';
+  }
+}
+
+function pick(el,id,price,name){
+  document.querySelectorAll('.plan-card').forEach(function(c){c.classList.remove('sel');});
+  el.classList.add('sel');
+  selPlan={id,price,name};
+
+  var bookSel=document.getElementById('book-selector');
+
+  if(id==='book'){
+    var cartLabel=document.getElementById('cart-label');
+    var cartTotal=document.getElementById('cart-total');
+    var cartBtn=document.getElementById('cart-btn');
+    var cart=document.getElementById('cart');
+    if(cartLabel) cartLabel.textContent='Choose a book type below';
+    if(cartTotal) cartTotal.textContent='from $44.99';
+    if(cartBtn){ cartBtn.disabled=true; cartBtn.textContent='CHOOSE A BOOK ↓'; }
+    if(cart) cart.classList.add('show');
+    return;
+  }
+
+  updateCart();
+  var cart=document.getElementById('cart');
+  var cartBtn=document.getElementById('cart-btn');
+  if(cart) cart.classList.add('show');
+  if(cartBtn) cartBtn.disabled=false;
+}
+
+function addOn(el){
+  var id=el.dataset.id, price=parseFloat(el.dataset.price);
+  el.classList.toggle('sel');
+  if(el.classList.contains('sel')) selAddons[id]=price;
+  else delete selAddons[id];
+  updateCart();
+}
+
+function updateCart(){
+  if(!selPlan) return;
+  var at=Object.values(selAddons).reduce(function(a,b){return a+b;},0);
+  var total=(selPlan.price+at).toFixed(2);
+  var ac=Object.keys(selAddons).length;
+  var cartLabel=document.getElementById('cart-label');
+  var cartTotal=document.getElementById('cart-total');
+  var cartBtn=document.getElementById('cart-btn');
+  if(cartLabel) cartLabel.textContent=selPlan.name+(ac?' + '+ac+' add-on'+(ac>1?'s':''):'');
+  if(cartTotal) cartTotal.textContent=selPlan.price===0&&at===0?'FREE':'$'+total;
+  if(cartBtn) cartBtn.textContent=selPlan.price===0&&at===0?'START FREE ✦':'CONTINUE ✦';
+}
+
+function cartContinue(){
+  if(!selPlan) return;
+
+  // Book plan — just scroll down, selector is always visible
+  if(selPlan.id==='book'){
+    var sel=document.getElementById('book-selector');
+    if(sel) window.scrollBy(0, 300);
+    return;
+  }
+
+  // Book sub-type already chosen — go to form
+  if(selPlan.id.startsWith('book_')){
+    document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');});
+    document.getElementById('form').classList.add('on');
+    window.scrollTo(0,0);
+    return;
+  }
+
+  checkout();
+}
+
+// ── STRIPE PAYMENT LINKS ──
+var STRIPE_LINKS = {
+  'complete':        'https://buy.stripe.com/4gMeVd5tS56s8M05ur6Na08',
+  'couples':         'https://buy.stripe.com/eVqbJ1e0ogPa2nC4qn6Na09',
+  'family':          'https://buy.stripe.com/6oU14nf4s2Yk1jyaOL6Na02',
+  'book_personal':   'https://buy.stripe.com/3cI00jaOcgPa3rGcWT6Na03',
+  'book_friendship': 'https://buy.stripe.com/7sYcN57C00Qcd2gcWT6Na04',
+  'book_love':       'https://buy.stripe.com/bJedR909y8iEgesf516Na05',
+  'book_family':     'https://buy.stripe.com/cNi8wPf4s0Qc2nC2if6Na06',
+};
+
+function checkout(){
+  if(!selPlan) return;
+
+  // Family goes straight to family screen — no payment link needed yet
+  if(selPlan.id==='family'){
+    go('family-screen');
+    return;
+  }
+
+  // Sneak peek is free — go straight to form
+  if(selPlan.id==='sneak'){
+    var partnerToggle=document.getElementById('partner-toggle');
+    var partner=document.getElementById('partner');
+    var parr=document.getElementById('parr');
+    if(partnerToggle) partnerToggle.style.display='none';
+    if(partner) partner.classList.remove('open');
+    if(parr) parr.classList.remove('open');
+    var bookOpts=document.getElementById('book-options');
+    if(bookOpts) bookOpts.style.display='none';
+    go('form');
+    return;
+  }
+
+  // Paid plans — open Stripe in new tab then show form
+  var link = STRIPE_LINKS[selPlan.id];
+  if(link){
+    window.open(link,'_blank');
+  }
+
+  // Always show form immediately
+  showForm();
+}
+
+function showForm(){
+  if(!selPlan) return;
+  var partnerToggle=document.getElementById('partner-toggle');
+  var partner=document.getElementById('partner');
+  var parr=document.getElementById('parr');
+  if(selPlan.id==='sneak'){
+    if(partnerToggle) partnerToggle.style.display='none';
+    if(partner) partner.classList.remove('open');
+    if(parr) parr.classList.remove('open');
+  } else {
+    if(partnerToggle) partnerToggle.style.display='block';
+    if(selPlan.id==='couples'){
+      if(partner) partner.classList.add('open');
+      if(parr) parr.classList.add('open');
+    }
+  }
+  // Show book options only for book plans
+  var bookOpts=document.getElementById('book-options');
+  if(bookOpts) bookOpts.style.display=(selPlan&&selPlan.id.startsWith('book_'))?'block':'none';
+  go('form');
+}
+
+// ── NUMEROLOGY ──
+function lv(c){var v={a:1,b:2,c:3,d:4,e:5,f:6,g:7,h:8,i:9,j:1,k:2,l:3,m:4,n:5,o:6,p:7,q:8,r:9,s:1,t:2,u:3,v:4,w:5,x:6,y:7,z:8};return v[c.toLowerCase()]||0;}
+function red(n){while(n>9&&n!==11&&n!==22&&n!==33)n=[...String(n)].reduce((a,d)=>a+parseInt(d),0);return n;}
+function nums(name,dob){
+  var p=dob.split('-').map(Number),yr=p[0],mo=p[1],dy=p[2];
+  var lp=red([...String(mo+dy+yr)].reduce((a,d)=>a+parseInt(d),0));
+  var ls=name.toLowerCase().replace(/[^a-z]/g,' ').split(''),vow='aeiou';
+  var all=0,vo=0,co=0;
+  ls.forEach(c=>{var v=lv(c);all+=v;if(vow.includes(c))vo+=v;else if(c!=' ')co+=v;});
+  return{lp,ex:red(all),su:red(vo),pe:red(co),bd:red(dy),mo,dy,yr};
+}
+
+function sun(m,dy){
+  var cusps=[
+    {s:[3,19],e:[3,26],n:'Pisces/Aries',l:'Cusp of Rebirth'},
+    {s:[4,19],e:[4,26],n:'Aries/Taurus',l:'Cusp of Power'},
+    {s:[5,19],e:[5,26],n:'Taurus/Gemini',l:'Cusp of Energy'},
+    {s:[6,19],e:[6,26],n:'Gemini/Cancer',l:'Cusp of Magic'},
+    {s:[7,19],e:[7,26],n:'Cancer/Leo',l:'Cusp of Oscillation'},
+    {s:[8,19],e:[8,26],n:'Leo/Virgo',l:'Cusp of Exposure'},
+    {s:[9,19],e:[9,26],n:'Virgo/Libra',l:'Cusp of Beauty'},
+    {s:[10,19],e:[10,26],n:'Libra/Scorpio',l:'Cusp of Drama'},
+    {s:[11,18],e:[11,25],n:'Scorpio/Sagittarius',l:'Cusp of Revolution'},
+    {s:[12,19],e:[12,26],n:'Sagittarius/Capricorn',l:'Cusp of Prophecy'},
+    {s:[1,17],e:[1,24],n:'Capricorn/Aquarius',l:'Cusp of Mystery'},
+    {s:[2,15],e:[2,22],n:'Aquarius/Pisces',l:'Cusp of Sensitivity'}
+  ];
+  // A cusp requires BOTH the start day AND end day to be in the same month range
+  // so we check: same month AND day falls between start and end dates
+  for(var c of cusps){
+    if(m===c.s[0] && dy>=c.s[1] && dy<=c.e[1]) return{sign:c.n,cusp:true,label:c.l};
+  }
+  var sg=[
+    [1,20,'Aquarius'],[2,19,'Pisces'],[3,21,'Aries'],
+    [4,20,'Taurus'],[5,21,'Gemini'],[6,21,'Cancer'],
+    [7,23,'Leo'],[8,23,'Virgo'],[9,23,'Libra'],
+    [10,23,'Scorpio'],[11,22,'Sagittarius'],[12,22,'Capricorn']
+  ];
+  for(var sg2 of sg) if(m===sg2[0]&&dy>=sg2[1]) return{sign:sg2[2],cusp:false};
+  var prev=['Capricorn','Aquarius','Pisces','Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius'];
+  return{sign:prev[m-1],cusp:false};
+}
+
+// ── LOADING ──
+var msgs=[['Reading the sky on the morning you arrived…','The story written into you before birth is being revealed.'],['Calculating your birth chart…','Every placement is being mapped to your story.'],['Decoding the numbers in your name…','Your life path and soul urge are being revealed.'],['Calling your spirit animals…','They are gathering. They always knew you were coming.'],['Tuning your healing frequencies…','The tones encoded in your chart are being identified.'],['Writing your cosmic story…','The stars have always known this. Almost ready.']];
+var li;
+function startLoad(){var i=0,t=document.getElementById('load-t'),s=document.getElementById('load-s');t.textContent=msgs[0][0];s.textContent=msgs[0][1];li=setInterval(()=>{i=(i+1)%msgs.length;t.style.opacity='0';s.style.opacity='0';setTimeout(()=>{t.textContent=msgs[i][0];s.textContent=msgs[i][1];t.style.opacity='1';s.style.opacity='1';},400);},4000);}
+function stopLoad(){clearInterval(li);}
+
+// ── GENERATE ──
+async function generate(){
+  var name=document.getElementById('f-name').value.trim();
+  var dob=document.getElementById('f-dob').value;
+  if(!name||!dob){alert('Please enter your full name and date of birth.');return;}
+  document.getElementById('gen-btn').disabled=true;
+
+  var tob=document.getElementById('f-tob').value;
+  var city=document.getElementById('f-city').value.trim();
+  var country=document.getElementById('f-country').value.trim();
+  var q=document.getElementById('f-q').value.trim();
+  var pname=document.getElementById('f-pname').value.trim();
+  var pdob=document.getElementById('f-pdob').value;
+  var pcity=document.getElementById('f-pcity').value.trim();
+  var pcountry=document.getElementById('f-pcountry').value.trim();
+  var pdur=document.getElementById('f-pdur').value.trim();
+
+  var n=nums(name,dob), parts=dob.split('-').map(Number);
+  var s=sun(parts[1],parts[2]);
+  var plan=selPlan?selPlan.id:'complete';
+  var addons=Object.keys(selAddons);
+
+  go('load'); startLoad();
+
+  // Collect shipping if book plan
+  var shipData='';
+  if(selPlan&&selPlan.id.startsWith('book_')){
+    var sName=document.getElementById('ship-name')?.value||'';
+    var sStreet=document.getElementById('ship-street')?.value||'';
+    var sApt=document.getElementById('ship-apt')?.value||'';
+    var sCity=document.getElementById('ship-city')?.value||'';
+    var sState=document.getElementById('ship-state')?.value||'';
+    var sZip=document.getElementById('ship-zip')?.value||'';
+    var sCountry=document.getElementById('ship-country')?.value||'';
+    var sPhone=document.getElementById('ship-phone')?.value||'';
+    shipData=[sName,sStreet,sApt,sCity,sState,sZip,sCountry,sPhone].filter(Boolean).join(' · ');
+  }
+  var pBit='';
+  if(hasP&&plan!=='sneak'){
+    var pp=pdob.split('-').map(Number),psun=sun(pp[1],pp[2]),pn=nums(pname,pdob);
+    var rel=compatType==='friend'?'Friend':'Partner';
+    var relLabel=compatType==='friend'?'FRIENDSHIP':'LOVE';
+    pBit=rel+': '+pname+' · '+pdob+' · Sun: '+psun.sign+(psun.cusp?' ('+psun.label+')':'')+' · Life Path: '+pn.lp+' · Expression: '+pn.ex+(pcity?' · Born: '+pcity+(pcountry?', '+pcountry:''):'')+( pdur?' · '+(compatType==='friend'?'Friends: ':'Together: ')+pdur:'')+' · Compatibility type: '+relLabel;
+  }
+
+  var prompt;
+  try{
+    prompt=buildPrompt({name,dob,tob,city,country,q,n,s,hasP,pBit,pname,pdob,pcity,pcountry,pdur,plan,addons});
+  }catch(pe){
+    stopLoad();
+    alert('Prompt error: '+pe.message);
+    go('form');
+    document.getElementById('gen-btn').disabled=false;
+    return;
+  }
+
+  try{
+    var res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:700,messages:[{role:'user',content:prompt}]})});
+    var data=await res.json();
+    if(data.error){ throw new Error('API Error: '+data.error.message); }
+    if(!data.content||!data.content.length){ throw new Error('Empty response from AI. Please try again.'); }
+    var text=data.content.map(b=>b.text||'').join('');
+    stopLoad();
+
+    document.getElementById('r-name').textContent=name;
+    document.getElementById('r-sign').textContent=s.cusp?s.sign+' · '+s.label:s.sign;
+
+    // Save all order data for book export
+    lastOrderData = {
+      name: name, dob: dob, tob: tob, city: city, country: country,
+      sign: s.sign, cusp: s.cusp, cuspLabel: s.cusp?s.label:'',
+      lifePath: n.lp, expression: n.ex, soulUrge: n.su, personality: n.pe, birthday: n.bd,
+      plan: selPlan?selPlan.id:'', planName: selPlan?selPlan.name:'',
+      partnerName: pname||'', partnerDob: pdob||'', partnerCity: pcity||'',
+      compatType: compatType,
+      copies: bookCopies, wallArt: wallArt, wallArtCopies: wallArtCopies,
+      shipName: document.getElementById('ship-name')?.value||'',
+      shipStreet: document.getElementById('ship-street')?.value||'',
+      shipApt: document.getElementById('ship-apt')?.value||'',
+      shipCity: document.getElementById('ship-city')?.value||'',
+      shipState: document.getElementById('ship-state')?.value||'',
+      shipZip: document.getElementById('ship-zip')?.value||'',
+      shipCountry: document.getElementById('ship-country')?.value||'',
+      shipPhone: document.getElementById('ship-phone')?.value||'',
+      orderDate: new Date().toLocaleDateString(),
+      readingText: ''  // filled below after render
+    };
+
+    // Show book export button for book plans
+    var bookWrap = document.getElementById('book-export-wrap');
+    if(bookWrap) bookWrap.style.display = (selPlan&&selPlan.id.startsWith('book_'))?'block':'none';
+    if(s.cusp){
+      var det=document.getElementById('r-details');
+      if(det) det.innerHTML='<div style="margin-top:8px;background:linear-gradient(135deg,rgba(180,120,20,0.3),rgba(100,50,120,0.3));border:1px solid rgba(212,168,67,0.5);border-radius:20px;padding:5px 14px;display:inline-block;font-family:\'Cinzel\',serif;font-size:7px;letter-spacing:3px;color:#F0D878;">✦ &nbsp; CUSPIAN &nbsp; ✦</div>';
+    } else {
+      var det=document.getElementById('r-details');
+      if(det) det.innerHTML='';
+    }
+    // Show shipping info if book order
+    if(shipData){
+      var shipDiv=document.getElementById('r-shipping');
+      if(shipDiv) shipDiv.innerHTML='<div style="margin:10px 16px;background:rgba(10,20,45,0.9);border:1px solid rgba(212,168,67,0.25);border-radius:6px;padding:10px;text-align:left;"><div style="font-family:\'Cinzel\',serif;font-size:7px;letter-spacing:2px;color:#D4A843;margin-bottom:6px;">📦 SHIP TO</div><div style="font-size:11px;color:rgba(220,200,160,0.85);line-height:1.7;">'+shipData.split(' · ').join('<br>')+'</div></div>';
+    }
+    var dobD=new Date(dob+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+    var details=[dobD,(city&&country)?city+', '+country:(city||country),'Life Path '+n.lp].filter(Boolean);
+    document.getElementById('r-details').innerHTML=details.map(d=>'<span class="rcd">'+d+'</span>').join('');
+    document.getElementById('r-body').innerHTML=renderText(text);
+    // Save reading text for book export
+    if(lastOrderData) lastOrderData.readingText = text;
+    buildTabs({name,n,s,addons,plan,pname,city,country});
+    go('result');
+  }catch(err){
+    stopLoad();
+    console.error('Generate error:', err.message, err.stack);
+    // Show error on screen so we can debug without dev tools
+    var errDiv = document.createElement('div');
+    errDiv.style.cssText = 'position:fixed;top:20px;left:10px;right:10px;background:rgba(139,0,0,0.95);color:#fff;padding:16px;border-radius:8px;font-size:12px;z-index:9999;word-break:break-all;';
+    errDiv.innerHTML = '<strong>Error:</strong> ' + err.message;
+    document.body.appendChild(errDiv);
+    setTimeout(function(){ errDiv.remove(); }, 10000);
+    go('form');
+    document.getElementById('gen-btn').disabled=false;
+  }
+}
+
+// ── PROMPTS ──
+function buildPrompt(d){
+  if(d.plan==='sneak') return sneakPrompt(d);
+
+  var isBook = d.plan && d.plan.startsWith('book_');
+  var isFriend = compatType==='friend';
+  var bookType = d.plan; // book_personal, book_friendship, book_love, book_family
+
+  // ── PERSONAL BOOK ──
+  if(bookType==='book_personal'){
+    var cuspNote = d.s.cusp ? `IMPORTANT — THIS PERSON IS A CUSPIAN: They were born on the ${d.s.label} (${d.s.sign}). This is rare and significant. They carry the full energy of BOTH signs. Open the reading by honoring this — they are not half of each sign, they are the fullness of both. Write about what it means to be a Cuspian, how both signs live inside them, where those energies harmonize and where they create beautiful tension. The Cuspian identity is central to their entire reading.` : '';
+    return `Write a beautiful personal cosmic biography for ${d.name}. Flowing literary prose only — no bullet points. 700 words maximum. Complete every section fully.
+
+PERSON: ${d.name} · Born ${d.dob}${d.tob?' at '+d.tob:''} · ${d.city||''}${d.country?', '+d.country:''} · Sun: ${d.s.sign}${d.s.cusp?' — '+d.s.label:''} · Life Path: ${d.n.lp} · Expression: ${d.n.ex} · Soul Urge: ${d.n.su}
+${cuspNote}
+
+<h2>${d.name}</h2>
+<h3>${d.s.sign}${d.s.cusp?' · '+d.s.label:''} · Life Path ${d.n.lp}</h3>
+<p class="drop">[${d.s.cusp?'Open by honoring their Cuspian nature — both signs named, both energies celebrated as one rare soul.':'Open with their sign and the sky the morning they were born. Make it feel like the cosmos has been waiting to tell them this.'}]</p>
+
+<hr>
+
+<h2 class="gold">Their Sign & Placements</h2>
+<h3>${d.s.cusp?'The Cuspian Nature · Both Signs · One Rare Soul':'What the sky says about '+d.name}</h3>
+<p>[${d.s.cusp?'Describe both signs fully — what each brings, how they live together inside this person, and what the combination creates that neither sign produces alone. This is the heart of the Cuspian identity.':'Their sun sign nature — what it means to be a '+d.s.sign+' at their core. Their Moon and Venus placements and what those say about how they feel and love.'}]</p>
+<p>[Their most significant planetary placements — written as gifts, not data.]</p>
+
+<hr>
+
+<h2 class="gold">Your Birth Chart in Depth</h2>
+<h3>Sun · Moon · Rising · Mercury · Venus · Mars · Jupiter · Saturn</h3>
+<p>[Write a rich, in-depth paragraph about their birth chart as a whole — what the overall pattern says about them. Then describe their Moon sign and what it reveals about their emotional inner world. Describe their Rising sign and how the world first sees them. Describe their Venus — how they love and what they find beautiful. Describe their Mars — where their drive and passion live. Write each planet as a living gift, not a textbook entry.]</p>
+<p>[Jupiter and Saturn — where blessings flow naturally for them, and where the cosmos is asking them to grow through patience and discipline. Written as invitation not as burden.]</p>
+
+<hr>
+
+<h2 class="rose">How They Were Made to Love</h2>
+<h3>Venus · Moon · Their love language</h3>
+<p>[How they love and what they need in love. Their way of loving is not a flaw — it is a design.]</p>
+
+<hr>
+
+<h2 class="teal">What the Numbers Know</h2>
+<h3>Life Path ${d.n.lp} · Expression ${d.n.ex} · Soul Urge ${d.n.su}</h3>
+<p>[Their numerology as a flowing story — what each number says about their purpose, their gifts, their calling.]</p>
+<blockquote><p>[One luminous closing sentence about who ${d.name} was conceived to be]</p></blockquote>`;
+  }
+
+  // ── FRIENDSHIP BOOK ──
+  if(bookType==='book_friendship'||(d.hasP&&isFriend)){
+    return `Write a friendship compatibility reading for ${d.name} and ${d.pname}. Flowing literary prose only. 700 words maximum. Complete every section fully. Open the very first sentence with BOTH names and BOTH signs together.
+
+FRIEND 1: ${d.name} · ${d.dob}${d.tob?' at '+d.tob:''} · Sun: ${d.s.sign}${d.s.cusp?' — '+d.s.label:''} · Life Path: ${d.n.lp} · Soul Urge: ${d.n.su} · Expression: ${d.n.ex} · Born: ${d.city||''}${d.country?', '+d.country:''}
+
+FRIEND 2: ${d.pBit}
+
+<h2 class="teal">${d.name} & ${d.pname}</h2>
+<h3>[Both sun signs · Their cosmic pairing as friends]</h3>
+<p class="drop">[First sentence names BOTH people and BOTH signs. What these two signs create together as friends — the energy, the dynamic, what the cosmos arranged.]</p>
+
+<hr>
+
+<h2 class="gold">Their Signs & Placements</h2>
+<h3>What the sky says about each of them</h3>
+<p>[Both sun signs woven together in every sentence. Their Moon signs and how they emotionally hold each other. Their Venus — how they show care as friends. Always both of them, never one alone.]</p>
+<p>[Their most relevant planetary placements for this friendship.]</p>
+
+<hr>
+
+<h2 class="rose">What They Have in Common</h2>
+<h3>The threads that connect them</h3>
+<p>[Similarities in their charts, their natures, their numbers. The common ground that makes this friendship feel natural and fated.]</p>
+
+<hr>
+
+<h2 class="sage">What Makes Them Work</h2>
+<h3>Compatibility · Strengths · How they move together</h3>
+<p>[Where they complement each other. What each brings that the other needs. How they balance.]</p>
+<p>[Their Life Paths together — what the numbers confirm about why these two found each other.]</p>
+<blockquote><p>[One luminous closing sentence naming both — what the stars say this friendship is for]</p></blockquote>`;
+  }
+
+  // ── LOVE / COUPLES BOOK ──
+  if(bookType==='book_love'||(d.hasP&&!isFriend)){
+    return `Write a love compatibility reading for ${d.name} and ${d.pname}. Flowing literary prose only. 700 words maximum. Complete every section fully. Open the very first sentence with BOTH names and BOTH signs together.
+
+PERSON 1: ${d.name} · ${d.dob}${d.tob?' at '+d.tob:''} · Sun: ${d.s.sign}${d.s.cusp?' — '+d.s.label:''} · Life Path: ${d.n.lp} · Soul Urge: ${d.n.su} · Expression: ${d.n.ex} · Born: ${d.city||''}${d.country?', '+d.country:''}
+
+PERSON 2: ${d.pBit}${d.pdur?' · Together: '+d.pdur:''}
+
+<h2 class="rose">${d.name} & ${d.pname}</h2>
+<h3>[Both sun signs · Their cosmic love pairing]</h3>
+<p class="drop">[First sentence names BOTH people and BOTH signs. What these two signs create together in love — the energy, the dynamic, what the cosmos arranged when these two charts met.]</p>
+
+<hr>
+
+<h2 class="gold">Their Signs & Placements</h2>
+<h3>What the sky says about each of them</h3>
+<p>[Both sun signs woven together in every sentence. Their Venus placements — how each one loves and whether those languages meet. Their Moon signs and emotional compatibility. Always both of them, never one alone.]</p>
+<p>[Their most significant planetary placements for this love bond.]</p>
+
+<hr>
+
+<h2 class="teal">What They Have in Common</h2>
+<h3>The threads that bind them</h3>
+<p>[Similarities in their charts, their natures, their numbers. The common ground that makes this love feel fated.]</p>
+
+<hr>
+
+<h2 class="sage">What Makes Them Work</h2>
+<h3>Compatibility · The gifts only this love creates</h3>
+<p>[Where they complement and balance each other. What each brings that the other needs. The specific gifts only this love creates.]</p>
+<p>[Their Life Paths together numerologically. What the numbers say about why these two souls found each other.]</p>
+<blockquote><p>[One luminous closing sentence naming both — what the stars say this love is ultimately for]</p></blockquote>`;
+  }
+
+  // ── FAMILY BOOK ──
+  if(bookType==='book_family'){
+    return `Write a family constellation reading. Flowing literary prose only. 700 words maximum. Complete every section fully. Open with ALL family members named and their signs in the very first paragraph.
+
+FAMILY DATA: ${d.name} (${d.s.sign}, Life Path ${d.n.lp})${d.pBit?' · '+d.pBit:''}
+
+<h2 class="gold">The ${d.name} Family</h2>
+<h3>[All family members · Their signs together]</h3>
+<p class="drop">[First paragraph names every family member by name with their sign. Describe what this family constellation looks like from the cosmos — what the gathering of these specific souls creates together.]</p>
+
+<hr>
+
+<h2 class="teal">Their Signs & Placements</h2>
+<h3>What the sky says about each member</h3>
+<p>[Weave all family members together — each person's sign nature in relation to the others. How their charts speak to each other. Moon signs and emotional dynamics. Always the whole family woven together.]</p>
+
+<hr>
+
+<h2 class="rose">What They Share</h2>
+<h3>The threads that bind this family</h3>
+<p>[Similarities across the family charts. The common ground, the shared gifts, the inherited threads that run through all of them.]</p>
+
+<hr>
+
+<h2 class="sage">How They Work Together</h2>
+<h3>Compatibility · Strengths · The family dynamic</h3>
+<p>[How the family members complement each other. The natural roles that emerged from the stars. What each person brings that the whole family needs.]</p>
+<p>[Their Life Paths together — what the numbers say about why this specific group of souls chose each other.]</p>
+<blockquote><p>[One luminous closing sentence about what the stars say this family was assembled to do together]</p></blockquote>`;
+  }
+
+  // ── DEFAULT / REGULAR READING ──
+  var isLove = !isFriend;
+  var comp=d.hasP?`
+<hr>
+
+${isLove?`<h2 class="rose">Your Love Compatibility</h2>
+<h3>${d.name} & ${d.pname}</h3>
+<p class="drop">[Both names and both signs in the first sentence. What these two create together in love.]</p>
+<p>[Venus and Moon compatibility. How they love and whether those languages meet.]</p>
+<p>[Life Paths together — what the numbers say about this love.]</p>
+<blockquote><p>[What the stars say this love is for]</p></blockquote>`:`<h2 class="teal">Your Friendship Compatibility</h2>
+<h3>${d.name} & ${d.pname}</h3>
+<p class="drop">[Both names and both signs in the first sentence. What these two create together as friends.]</p>
+<p>[Their planetary compatibility woven together.]</p>
+<p>[Life Paths together — what the numbers confirm about this friendship.]</p>
+<blockquote><p>[What the stars say this friendship is for]</p></blockquote>`}`:''
+
+  var cuspianNote = d.s&&d.s.cusp ? `\nCUSPIAN ALERT: ${d.name} was born on the ${d.s.label} (${d.s.sign}). They carry BOTH signs fully. Honor this prominently — the Cuspian is rare, complex, and deeply gifted. Open their reading by celebrating both signs and what the combination creates.` : '';
+
+  return `Write a beautiful cosmic reading for ${d.name}. Flowing literary prose only — no bullet points. 500 words maximum for solo, 600 words maximum with a second person. Complete every section. Never cut off mid sentence.
+
+PERSON: ${d.name} · ${d.dob}${d.tob?' at '+d.tob:''} · ${d.city||''}${d.country?', '+d.country:''} · Sun: ${d.s.sign}${d.s.cusp?' — '+d.s.label:''} · Life Path: ${d.n.lp} · Expression: ${d.n.ex} · Soul Urge: ${d.n.su} · Personality: ${d.n.pe}
+${d.pBit?'WITH: '+d.pBit:''}
+${d.q?'THEIR QUESTION: '+d.q:''}${cuspianNote}
+
+Write in this exact HTML format:
+
+<h2>The Morning They Arrived</h2>
+<h3>${d.s.sign}${d.s.cusp?' · '+d.s.label:''} · Life Path ${d.n.lp} · Born ${d.dob}</h3>
+<p class="drop">[${d.s&&d.s.cusp?'Open by celebrating their Cuspian nature — both signs named and honored. What it means to carry two full sign energies. How rare and complex this soul is. What the combination of both signs creates that neither produces alone.':'The sky the morning '+d.name+' was born. What it says about who they are. Personal and luminous.'}]</p>
+<p>[Their sun sign${d.s&&d.s.cusp?' Cuspian':''} nature in depth — written as a story not a description. What it means to be ${d.s&&d.s.cusp?'born on the '+d.s.label:'a '+d.s.sign} at their core, the gifts this brings, and the particular light they carry.]</p>
+
+<hr>
+
+<h2 class="teal">Their Birth Chart</h2>
+<h3>Sun · Moon · Rising · Venus · Mars · Jupiter · Saturn</h3>
+<p class="drop">[Rich in-depth reading of their full birth chart. Start with their Moon sign — their emotional inner world, what they need to feel safe, how they process feeling. Their Rising — how the world first sees them before they say a word. Their Venus — how they love and what they find beautiful. Their Mars — where their drive and passion live. Each planet written as a living gift, connected to who ${d.name} is as a whole person.]</p>
+<p>[Jupiter — where blessings flow naturally for them. Saturn — where the cosmos asks them to grow through patience and discipline. Written as invitation not burden.]</p>
+
+<hr>
+
+${!d.hasP||isLove?`<h2 class="gold">What the Numbers Know</h2>
+<h3>Life Path ${d.n.lp} · Expression ${d.n.ex} · Soul Urge ${d.n.su}</h3>
+<p class="drop">[Life Path ${d.n.lp} as a flowing story — their tests, gifts, life purpose.]</p>
+<p>[Expression ${d.n.ex} and Soul Urge ${d.n.su} — their destiny and deepest desire woven together.]</p>
+<blockquote><p>[A luminous pull quote about their numerological identity]</p></blockquote>
+
+<hr>
+
+`:''}${isLove?`<h2>The Way They Were Made to Love</h2>
+<h3>Venus · Moon · Their love language</h3>
+<p class="drop">[How they love — specific to their chart. Their way of loving is not a flaw, it is a design.]</p>
+<blockquote><p>[Pull quote about their love]</p></blockquote>
+
+<hr>
+
+`:''}${comp}
+
+<hr>
+
+<h2 class="sage">Their Soul Purpose</h2>
+<h3>Why they are here · What they came to build</h3>
+<p class="drop">[Their soul purpose — the specific calling they were conceived for.]</p>
+<p>[Their spirit animals — which ones are drawn to their chart and what they carry.]</p>
+<blockquote><p>[One luminous final sentence about who ${d.name} was born to be]</p></blockquote>
+
+FREQ_DATA:{"primary":{"hz":REPLACE_HZ,"label":"REPLACE","purpose":"REPLACE","color":"#B8920E"},"emotional":{"hz":REPLACE_HZ,"label":"REPLACE","purpose":"REPLACE","color":"#8B2A50"},"soul":{"hz":REPLACE_HZ,"label":"REPLACE","purpose":"REPLACE","color":"#2D1A60"},"love":{"hz":528,"label":"Heart Frequency","purpose":"REPLACE","color":"#C46888"}}:END_FREQ`;
+}
+
+function sneakPrompt(d){
+  return 'Write a SHORT, beautiful free sneak peek cosmic reading for '+d.name+' — about 400 words maximum. Personal and luminous, but deliberately incomplete. Leave them wanting much more.\n\nPERSON: '+d.name+' · '+d.dob+' · Sun: '+d.s.sign+(d.s.cusp?' ('+d.s.cusp+')':'')+' · Life Path: '+d.n.lp+'\n\nWrite ONLY these three sections and NOTHING else. Stop completely after the third section:\n\n<h2>A Glimpse of Who You Are</h2>\n<h3>'+d.s.sign+(d.s.cusp?' · '+d.s.label:'')+' · Life Path '+d.n.lp+'</h3>\n<p class="drop">[One beautiful opening paragraph — the sky when they were born and who they arrived as. Specific to their sun sign. Warm and luminous.]</p>\n\n<hr>\n\n<h2 class="gold">Life Path '+d.n.lp+'</h2>\n<h3>A glimpse of your journey</h3>\n<p>[Two or three sentences only about their Life Path '+d.n.lp+'. Give them just enough to feel seen. Stop — do not go deeper.]</p>\n<blockquote><p>[One single powerful sentence about what their Life Path says about them]</p></blockquote>\n\n<hr>\n\nSTOP HERE. Do not write any closing section after the Life Path blockquote.';
+}
+
+// ── RENDER ──
+var aCtx=null, aOsc={};
+function getCtx(){if(!aCtx)aCtx=new(window.AudioContext||window.webkitAudioContext)();return aCtx;}
+
+function playF(card,hz){
+  var ctx=getCtx(), id=card.dataset.fid;
+  if(aOsc[id]){aOsc[id].g.gain.linearRampToValueAtTime(0,ctx.currentTime+.5);setTimeout(()=>{try{aOsc[id].o.stop();}catch(e){}delete aOsc[id];},500);card.classList.remove('playing');card.querySelector('.freq-play-btn').textContent='TAP TO LISTEN';return;}
+  Object.keys(aOsc).forEach(k=>{aOsc[k].g.gain.linearRampToValueAtTime(0,ctx.currentTime+.3);setTimeout(()=>{try{aOsc[k].o.stop();}catch(e){}},300);delete aOsc[k];});
+  document.querySelectorAll('.freq-card.playing').forEach(c=>{c.classList.remove('playing');var b=c.querySelector('.freq-play-btn');if(b)b.textContent='TAP TO LISTEN';});
+  var o=ctx.createOscillator(), g=ctx.createGain();
+  o.type='sine';o.frequency.value=hz;g.gain.setValueAtTime(0,ctx.currentTime);g.gain.linearRampToValueAtTime(.28,ctx.currentTime+1.5);
+  o.connect(g);g.connect(ctx.destination);o.start();
+  setTimeout(()=>{if(aOsc[id]){g.gain.linearRampToValueAtTime(0,ctx.currentTime+2);setTimeout(()=>{try{o.stop();}catch(e){}delete aOsc[id];},2000);card.classList.remove('playing');var b=card.querySelector('.freq-play-btn');if(b)b.textContent='TAP TO LISTEN';}},90000);
+  aOsc[id]={o,g};card.classList.add('playing');card.querySelector('.freq-play-btn').textContent='PLAYING ■ STOP';
+}
+
+// ── FREQUENCIES ──
+function buildFreqSection(fd){
+  if(!fd||!fd.primary) return '';
+  var cards=[
+    {k:'primary',t:'Your Primary Frequency'},
+    {k:'emotional',t:'Emotional Frequency'},
+    {k:'soul',t:'Soul Frequency'},
+    {k:'love',t:'Heart Frequency'}
+  ].filter(function(f){ return fd[f.k]&&fd[f.k].hz; });
+  if(!cards.length) return '';
+  var h='<div class="freq-section"><span class="freq-section-eye">✦ YOUR PERSONAL HEALING FREQUENCIES ✦</span><div class="freq-section-sub">🎧 Tap to play · Use headphones for the deepest experience</div><div class="freq-cards">';
+  cards.forEach(function(f,i){
+    var d=fd[f.k];
+    h+='<div class="freq-card" data-fid="pf'+i+'" onclick="playF(this,'+d.hz+')">'
+      +'<div class="freq-hz">'+d.hz+'<span> Hz</span></div>'
+      +'<span class="freq-label">'+f.t+'</span>'
+      +'<div class="freq-purpose">'+(d.purpose||d.label||'')+'</div>'
+      +'<div style="display:flex;gap:6px;margin-top:8px;">'
+      +'<span class="freq-play-btn">TAP TO LISTEN</span>'
+      +'<button onclick="event.stopPropagation();downloadTone('+d.hz+')" style="font-family:\'Cinzel\',serif;font-size:6px;letter-spacing:1px;background:rgba(212,168,67,0.15);border:1px solid rgba(212,168,67,0.4);color:#D4A843;padding:4px 8px;border-radius:3px;cursor:pointer;">⬇ DOWNLOAD</button>'
+      +'</div>'
+      +'</div>';
+  });
+  h+='</div></div>';
+  return h;
+}
+
+function downloadTone(hz){
+  var duration=60, sr=44100, samples=duration*sr;
+  var buf=new ArrayBuffer(44+samples*2);
+  var view=new DataView(buf);
+  function ws(o,s){for(var i=0;i<s.length;i++)view.setUint8(o+i,s.charCodeAt(i));}
+  ws(0,'RIFF'); view.setUint32(4,36+samples*2,true); ws(8,'WAVE');
+  ws(12,'fmt '); view.setUint32(16,16,true); view.setUint16(20,1,true);
+  view.setUint16(22,1,true); view.setUint32(24,sr,true); view.setUint32(28,sr*2,true);
+  view.setUint16(32,2,true); view.setUint16(34,16,true);
+  ws(36,'data'); view.setUint32(40,samples*2,true);
+  for(var i=0;i<samples;i++){
+    var t=i/sr;
+    var fade=t<2?(t/2):t>58?((60-t)/2):1;
+    var val=Math.sin(2*Math.PI*hz*t)*fade*0.7*32767;
+    view.setInt16(44+i*2,val,true);
+  }
+  var blob=new Blob([buf],{type:'audio/wav'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=hz+'hz-healing-tone.wav';
+  a.click();
+}
+
+function renderText(raw){
+  var fh='';
+  if(selPlan&&selPlan.id!=='sneak'){
+    var fm=raw.match(/FREQ_DATA:([\s\S]*?):END_FREQ/);
+    if(fm){
+      try{
+        var fdRaw=fm[1].trim().replace(/REPLACE_HZ/g,'528').replace(/REPLACE/g,'Healing tone');
+        var fd=JSON.parse(fdRaw);
+        fh=buildFreqSection(fd);
+      }catch(e){}
+      raw=raw.replace(/FREQ_DATA:[\s\S]*?:END_FREQ/,'');
+    }
+    if(fh) raw+=fh;
+  } else {
+    raw=raw.replace(/FREQ_DATA:[\s\S]*?:END_FREQ/,'');
+  }
+  // Add upgrade box for sneak peek
+  if(selPlan&&selPlan.id==='sneak'){
+    raw+='<div style="text-align:center;padding:20px 14px;background:rgba(10,20,45,0.9);border:1px solid rgba(212,168,67,.4);border-radius:6px;margin-top:20px;"><p style="font-family:Arial,sans-serif;font-size:8px;letter-spacing:5px;color:#D4A843;margin-bottom:10px;">THERE IS SO MUCH MORE WAITING FOR YOU</p><p style="font-style:italic;font-size:16px;color:#F0D878;line-height:1.8;">The Complete Reading reveals all five of your numerology numbers, every spirit animal called to you, your complete soul purpose, how you were made to love, four personal healing frequencies, and the full portrait of who you were born to be — for just $7.99.</p></div>';
+  }
+  return raw;
+}
+
+// ── ADDON TABS ──
+var CHAKRAS=[{n:'Root',hz:396,c:'#C0392B',d:'Grounding, safety'},{n:'Sacral',hz:417,c:'#E67E22',d:'Creativity, flow'},{n:'Solar Plexus',hz:528,c:'#F1C40F',d:'Confidence, power'},{n:'Heart',hz:639,c:'#27AE60',d:'Love, healing'},{n:'Throat',hz:741,c:'#2980B9',d:'Truth, expression'},{n:'Third Eye',hz:852,c:'#8E44AD',d:'Intuition, vision'},{n:'Crown',hz:963,c:'#9B59B6',d:'Divine connection'}];
+var ANIMALS=[{id:'cats',n:'Cats',e:'🐱',f:[{hz:25,l:'Egyptian Purr'},{hz:528,l:'Love Tone'},{hz:432,l:'Earth Harmony'},{hz:50,l:'Bastet Frequency'}]},{id:'dogs',n:'Dogs',e:'🐕',f:[{hz:396,l:'Canine Calm'},{hz:432,l:'Earth Grounding'},{hz:639,l:'Connection Tone'}]},{id:'birds',n:'Birds',e:'🐦',f:[{hz:528,l:'Song Resonance'},{hz:741,l:'Voice'},{hz:432,l:'Nature Harmony'}]},{id:'horses',n:'Horses',e:'🐴',f:[{hz:432,l:'Earth Rhythm'},{hz:396,l:'Fear Release'},{hz:639,l:'Trust'}]},{id:'wild',n:'Wild Animals',e:'🦁',f:[{hz:432,l:'Nature'},{hz:528,l:'Healing'},{hz:396,l:'Safety'}]}];
+var HEART_F=[{hz:528,l:'Love Frequency',p:'Miracle Tone — activates heart love capacity',c:'#C46888'},{hz:639,l:'Connection',p:'Harmonizes relationships',c:'#E91E63'},{hz:432,l:'Heart Grounding',p:'Grounds love into daily life',c:'#B8920E'},{hz:396,l:'Liberation',p:'Opens the heart gently',c:'#C0392B'}];
+var MED_F=[{hz:417,l:'Troubled Mind',p:'Dissolves emotional blockages',c:'#4A3080'},{hz:741,l:'Mental Clarity',p:'Activates clear thinking',c:'#2980B9'},{hz:852,l:'Spirit Connection',p:'Deepens higher self connection',c:'#8E44AD'},{hz:963,l:'Divine Connection',p:'Unity consciousness',c:'#9B59B6'},{hz:396,l:'Fear Liberation',p:'Releases guilt and fear',c:'#C0392B'},{hz:7.83,l:'Earth Heartbeat',p:"Earth's own frequency — deepest grounding",c:'#27AE60'}];
+
+
+var TAROT={tarot_rws:{n:'Rider-Waite-Smith Tarot',e:'🃏',cards:[{n:'The Fool',e:'🌟'},{n:'The Magician',e:'⚡'},{n:'The High Priestess',e:'🌙'},{n:'The Empress',e:'🌸'},{n:'The Emperor',e:'👑'},{n:'The Lovers',e:'💗'},{n:'The Tower',e:'🏚'},{n:'The Star',e:'⭐'},{n:'The Moon',e:'🌕'},{n:'The Sun',e:'☀️'},{n:'Judgement',e:'🔔'},{n:'The World',e:'🌍'}]},tarot_oracle:{n:'Oracle Tarot',e:'🔮',cards:[{n:'Transformation',e:'🦋'},{n:'Divine Timing',e:'⏰'},{n:'Trust',e:'🙏'},{n:'Release',e:'🕊️'},{n:'Abundance',e:'🌻'},{n:'Sacred Path',e:'✨'},{n:'Healing',e:'💚'},{n:'Awakening',e:'🌅'},{n:'Spirit Guide',e:'👁️'}]},tarot_angelic:{n:'Angelic Tarot',e:'👼',cards:[{n:'Archangel Michael',e:'⚔️'},{n:'Archangel Gabriel',e:'📯'},{n:'Archangel Raphael',e:'💚'},{n:'Guardian Angel',e:'😇'},{n:'Divine Love',e:'💗'},{n:'Answered Prayer',e:'🙏'},{n:'Divine Protection',e:'🛡️'},{n:'Soul Mission',e:'🌟'},{n:"Heaven's Blessing",e:'☁️'}]}};
+
+
+
+
+function buildTabs(ud){
+  if(!ud||!ud.s||!ud.n) return;
+  var container=document.getElementById('addon-tabs'),nav=document.getElementById('tab-nav'),panels=document.getElementById('tab-panels');
+  if(!container||!nav||!panels) return;
+  nav.innerHTML='';panels.innerHTML='';
+  var defs=[{id:'chakra',l:'🌈 Chakra',a:'chakra'},{id:'birthchart',l:'⭕ Birth Chart',a:'birthchart'},{id:'tarot_rws',l:'🃏 Tarot',a:'tarot_rws'},{id:'tarot_oracle',l:'🔮 Oracle',a:'tarot_oracle'},{id:'tarot_angelic',l:'👼 Angelic',a:'tarot_angelic'},{id:'palm',l:'🤚 Palm',a:'palm'},{id:'heartfreq',l:'💗 Heart',a:'heartfreq'},{id:'meditation',l:'🧘 Meditation',a:'meditation'},{id:'catfreq',l:'🐈 Cats',a:'catfreq'},{id:'animalmusic',l:'🐾 Animals',a:'animalmusic'},{id:'autism',l:'🌟 Autism',a:'autism'}].filter(t=>ud.addons.includes(t.a)||(ud.plan==='complete'&&['chakra','birthchart'].includes(t.a)));
+  // Sneak peek gets NO addon tabs at all
+  if(ud.plan==='sneak') defs=[];
+  if(!defs.length){container.style.display='none';return;}
+  container.style.display='block';
+  defs.forEach((t,i)=>{
+    var btn=document.createElement('button');btn.className='tab-btn'+(i===0?' active':'');btn.textContent=t.l;
+    btn.onclick=()=>{document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById('tp_'+t.id).classList.add('active');};
+    nav.appendChild(btn);
+    var panel=document.createElement('div');panel.id='tp_'+t.id;panel.className='tab-panel'+(i===0?' active':'');panel.innerHTML=tabContent(t.id,ud);panels.appendChild(panel);
+  });
+}
+
+function fCards(freqs,prefix){
+  return freqs.map((f,i)=>'<div class="freq-card" data-fid="'+prefix+i+'" onclick="playF(this,'+f.hz+')"><div class="freq-hz">'+f.hz+'<span> Hz</span></div><span class="freq-label">'+(f.l||'')+'</span><div class="freq-purpose">'+(f.p||'')+'</div><span class="freq-play-btn">TAP TO LISTEN</span></div>').join('');
+}
+
+function tabContent(id,ud){
+  if(id==='freqs') return '';
+  if(id==='heartfreq') return '<div class="freq-section" style="display:none"><span class="freq-section-eye">💗 HEART FREQUENCIES</span><div class="freq-section-sub">Sacred tones for the heart chakra and deep heart healing</div><div class="freq-cards">'+fCards(HEART_F,'hf')+'</div><div class="freq-tip">🎧 Best with headphones</div></div>';
+  if(id==='meditation') return '<div class="freq-section"><span class="freq-section-eye">🧘 MEDITATION FREQUENCIES</span><div class="freq-section-sub">For troubled minds, clarity & spirit connection</div><div class="freq-cards">'+fCards(MED_F,'mf')+'</div></div>';
+  if(id==='catfreq') return '<div class="freq-section"><span class="freq-section-eye">🐈 EGYPTIAN CAT FREQUENCIES</span><div class="freq-section-sub">Sacred Egyptian musical frequencies for cats</div><div class="freq-cards">'+fCards([{hz:25,l:'Egyptian Purr',p:'Sacred healing — mirrors natural feline purr'},{hz:528,l:'Bastet Love Tone',p:'Ancient Egyptian cat goddess frequency'},{hz:432,l:'Earth Harmony',p:'Natural tuning — calms anxious cats'},{hz:50,l:'Feline Calm',p:'Deep purr resonance for sleep'}],'cf')+'</div></div>';
+  if(id==='animalmusic') return '<div class="tool-card">'+ANIMALS.map(a=>'<h3>'+a.e+' '+a.n+'</h3><div class="freq-cards" style="margin:10px 0 20px;">'+fCards(a.f.map(f=>({...f,p:''})),'an'+a.id)+'</div>').join('')+'</div>';
+  if(id==='chakra') return '<div class="tool-card"><h3>🌈 Chakra & Aura Reading</h3><span class="tool-sub">Tap any chakra to play its frequency and receive your reading</span><div class="chakra-grid">'+CHAKRAS.map((c,i)=>'<div class="chk-card" onclick="readChakra(\''+c.n+'\','+c.hz+',\''+c.c+'\','+i+')"><div class="chk-dot" style="background:'+c.c+';box-shadow:0 0 10px '+c.c+'55;"></div><div class="chk-name">'+c.n.toUpperCase()+'</div><div class="chk-hz" style="color:'+c.c+';">'+c.hz+' Hz</div><div class="chk-desc">'+c.d+'</div></div>').join('')+'</div><div class="response-box" id="chk-res"></div></div>';
+  if(id==='birthchart') return '<div class="tool-card"><h3>⭕ Birth Chart</h3><span class="tool-sub">Your natal chart with compatibility readings</span><canvas id="bc" width="300" height="300" style="display:block;margin:14px auto;max-width:100%;"></canvas><p style="text-align:center;margin:10px 0 16px;"><button class="ask-btn" onclick="drawBirthChart(\''+ud.s.sign+'\','+ud.n.lp+')">GENERATE CHART</button></p><div class="compat-grid">'+['💗 Love','🤝 Friendship','👨‍👩‍👧 Family','🐾 Pet'].map(t=>'<div class="compat-card" onclick="getCompat(\''+t+'\',\''+ud.s.sign+'\','+ud.n.lp+')"><div style="font-size:22px;">'+t.split(' ')[0]+'</div><div style="font-family:Arial,sans-serif;font-size:8px;letter-spacing:2px;color:#D4A843;margin-top:4px;">'+t.split(' ').slice(1).join(' ')+'</div></div>').join('')+'</div><div class="response-box" id="compat-res"></div></div>';
+  
+  if(id==='palm') return '<div class="tool-card"><h3>🤚 Palm Reader</h3><span class="tool-sub">Upload a clear photo of your palm</span><div class="palm-area" onclick="document.getElementById(\'palm-inp\').click()"><div style="font-size:44px;margin-bottom:10px;">🤚</div><div style="font-style:italic;font-size:14px;color:rgba(220,200,160,0.85);">Tap to upload your palm photo</div><input type="file" id="palm-inp" accept="image/*" style="display:none;" onchange="uploadPalm(this)"/></div><div class="response-box" id="palm-res"></div><h3 style="margin-top:16px;font-size:16px;color:#F0D878;">Ask Your Palm a Question</h3><textarea class="ask-input" id="palm-q" placeholder="e.g. What does my heart line say about love?"></textarea><button class="ask-btn" onclick="palmQ()">✦ ASK THE LINES ✦</button><div class="response-box" id="palm-qr"></div></div>';
+  if(id.startsWith('tarot')) return buildTarot(id);
+  return '';
+}
+
+
+
+async function ai(prompt,maxTok=500){
+  var r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:maxTok,messages:[{role:'user',content:prompt}]})});
+  var d=await r.json();return d.content[0].text;
+}
+
+
+async function readChakra(name,hz,color,idx){
+  var res=document.getElementById('chk-res');res.style.display='block';res.innerHTML='<em style="color:'+color+'">Reading your '+name+' chakra…</em>';
+  var card=document.createElement('div');card.dataset.fid='ck'+idx;card.innerHTML='<span class="freq-play-btn"></span>';document.body.appendChild(card);playF(card,hz);document.body.removeChild(card);
+  try{res.innerHTML='<div style="font-size:15px;line-height:1.85;">'+(await ai('Write a personal, warm 2-paragraph chakra reading for the '+name+' chakra ('+hz+' Hz). First: what it governs and what balanced vs blocked looks like. Second: what working with this chakra might unlock right now. Flowing prose, no bullet points.'))+'</div>';}catch(e){res.textContent='Unable to generate. Please try again.';}
+}
+
+function drawBirthChart(sign,lp){
+  var c=document.getElementById('bc');if(!c)return;
+  var ctx=c.getContext('2d'),cx=150,cy=150,r=130;
+  ctx.clearRect(0,0,300,300);ctx.fillStyle='#FBF7EF';ctx.fillRect(0,0,300,300);
+  ctx.strokeStyle='rgba(184,146,14,.4)';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();
+  [.75,.5,.25].forEach(f=>{ctx.globalAlpha=.2;ctx.beginPath();ctx.arc(cx,cy,r*f,0,Math.PI*2);ctx.stroke();});ctx.globalAlpha=1;
+  for(var i=0;i<12;i++){var a=i*(Math.PI*2/12);ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));ctx.strokeStyle='rgba(184,146,14,.15)';ctx.lineWidth=1;ctx.stroke();ctx.fillStyle='rgba(139,105,16,.5)';ctx.font='9px Arial';ctx.textAlign='center';ctx.textBaseline='middle';var nr=r*.88;ctx.fillText(String(i+1),cx+nr*Math.cos(a-Math.PI/12),cy+nr*Math.sin(a-Math.PI/12));}
+  [{s:'☀',a:.5,r2:.6},{s:'☽',a:1.2,r2:.7},{s:'♀',a:2.1,r2:.55},{s:'♂',a:3.0,r2:.65},{s:'♃',a:4.1,r2:.75},{s:'♄',a:5.0,r2:.6}].forEach(p=>{var x=cx+(r*p.r2)*Math.cos(p.a),y=cy+(r*p.r2)*Math.sin(p.a);ctx.fillStyle='#2D1A60';ctx.font='bold 13px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.s,x,y);});
+  ctx.fillStyle='rgba(139,105,16,.7)';ctx.font='bold 10px Arial';ctx.textAlign='center';ctx.fillText(sign.split('/')[0],cx,cy-7);ctx.font='9px Arial';ctx.fillStyle='rgba(184,146,14,.6)';ctx.fillText('LP '+lp,cx,cy+9);
+}
+
+async function getCompat(type,sign,lp){
+  var res=document.getElementById('compat-res');res.style.display='block';res.textContent='Generating your '+type+' reading…';
+  try{res.innerHTML='<div style="font-size:15px;line-height:1.85;">'+(await ai('Write a personal '+type+' compatibility reading for someone with Sun in '+sign+' and Life Path '+lp+'. 2 flowing paragraphs — who they are naturally compatible with and their greatest gift in this relationship type. Warm, specific, no bullet points.'))+'</div>';}catch(e){res.textContent='Unable to generate. Please try again.';}
+}
+
+async function uploadPalm(input){
+  var file=input.files[0];if(!file)return;
+  var res=document.getElementById('palm-res');res.style.display='block';res.textContent='Reading the lines of your palm…';
+  var b64=await new Promise((resolve,reject)=>{var r=new FileReader();r.onload=()=>resolve(r.result.split(',')[1]);r.onerror=reject;r.readAsDataURL(file);});
+  try{
+    var resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:700,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:file.type,data:b64}},{type:'text',text:'You are a gifted palm reader. Write a complete, beautiful palm reading in flowing prose (3-4 paragraphs). Cover: life line, heart line, head line, fate line, notable markings. Personal and specific to what you see. No bullet points.'}]}]})});
+    var data=await resp.json();res.innerHTML='<div style="font-size:15px;line-height:1.85;">'+data.content[0].text+'</div>';
+  }catch(e){res.textContent='Please try again with a clear, well-lit image.';}
+}
+
+async function palmQ(){
+  var q=document.getElementById('palm-q').value.trim();if(!q){alert('Please enter a question.');return;}
+  var res=document.getElementById('palm-qr');res.style.display='block';res.textContent='The lines are speaking…';
+  try{res.innerHTML='<div style="font-size:15px;line-height:1.85;">'+(await ai('As a gifted palm reader, answer this question in 2 flowing paragraphs: "'+q+'". Warm, specific, mystical. No bullet points.'))+'</div>';}catch(e){res.textContent='Unable to generate. Please try again.';}
+}
+
+function buildTarot(id){
+  var deck=TAROT[id];if(!deck)return '';
+  return '<div class="tool-card"><h3>'+deck.e+' '+deck.n+'</h3><span class="tool-sub">Tap a card to draw your reading</span><textarea class="ask-input" id="'+id+'-q" placeholder="What question is on your heart? (optional)"></textarea><div class="tarot-grid">'+deck.cards.map((c,i)=>'<div class="t-card" data-name="'+c.n+'" data-emoji="'+c.e+'" onclick="drawCard(this,\''+id+'\')">✦</div>').join('')+'</div><div class="response-box" id="'+id+'-res"></div></div>';
+}
+
+async function drawCard(card,deckId){
+  if(card.classList.contains('flipped'))return;
+  card.classList.add('flipped');card.textContent=card.dataset.emoji;
+  var cardName=card.dataset.name,q=(document.getElementById(deckId+'-q')?.value.trim()||'');
+  var res=document.getElementById(deckId+'-res');res.style.display='block';res.textContent='The '+cardName+' has chosen you…';
+  var type=deckId.replace('tarot_','');
+  try{res.innerHTML='<div style="font-size:15px;line-height:1.85;"><strong style="font-family:Arial,sans-serif;font-size:8px;letter-spacing:3px;color:#D4A843;">'+cardName+'</strong><br><br>'+(await ai('You are a gifted '+type+' tarot reader. The card "'+cardName+'" has been drawn'+(q?' for: "'+q+'"':'')+'. Write a beautiful 3-paragraph reading: (1) What this card means, (2) Its message for this moment, (3) A direct warm message to the person. Flowing prose. No bullet points.',500))+'</div>';}catch(e){res.textContent='Unable to generate. Please try again.';}
+}
+
+
+// Store customer data for book export
+var lastOrderData = {};
+
+function exportBookOrder(){
+  if(!lastOrderData.name){ alert('No reading data found. Please generate a reading first.'); return; }
+  var json = JSON.stringify(lastOrderData, null, 2);
+  var blob = new Blob([json], {type:'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = (lastOrderData.name||'customer').replace(/\s+/g,'_')+'_book_order.json';
+  a.click();
+}
+
+async function generateBookPDF(){
+  if(!lastOrderData.name){ alert('No reading data found. Please generate a reading first.'); return; }
+  if(typeof window.jspdf === 'undefined'){
+    alert('PDF library still loading. Please wait a moment and try again.');
+    return;
+  }
+
+  var btn = document.getElementById('gen-book-btn');
+  var status = document.getElementById('book-pdf-status');
+  btn.disabled = true;
+  btn.textContent = 'Building book...';
+  status.style.display = 'block';
+
+  try {
+    var d = lastOrderData;
+    var { jsPDF } = window.jspdf;
+    var doc = new jsPDF({ unit:'pt', format:[450,666], orientation:'portrait' });
+
+    // Page dimensions
+    var W=450, H=666;
+    var ML=63, MR=54, MT=63, MB=63;
+    var TW=W-ML-MR, CX=W/2;
+
+    // Colors as [r,g,b]
+    var NIGHT=[10,8,32], DEEP=[13,21,53];
+    var GOLD=[212,168,67], GOLD_LT=[240,216,120], GOLD_DK=[139,105,16];
+    var CREAM=[245,237,216];
+    var ROSE=[232,160,184], TEAL=[123,196,196], SAGE=[123,196,154], VIOLET=[184,160,232];
+
+    var PLAN_COLORS = {
+      'book_personal': GOLD_LT, 'book_friendship': TEAL,
+      'book_love': ROSE, 'book_family': SAGE
+    };
+    var accent = PLAN_COLORS[d.plan] || GOLD_LT;
+
+    var pg = 0;
+
+    function setColor(col){ doc.setTextColor(col[0],col[1],col[2]); }
+    function setFill(col){ doc.setFillColor(col[0],col[1],col[2]); }
+    function setStroke(col){ doc.setDrawColor(col[0],col[1],col[2]); }
+
+    function drawBg(){
+      setFill(NIGHT); doc.rect(0,0,W,H,'F');
+      setFill(DEEP); doc.rect(0,H*0.2,W,H*0.6,'F');
+      setFill(NIGHT); doc.rect(0,0,W,H*0.22,'F');
+      setFill(NIGHT); doc.rect(0,H*0.78,W,H*0.22,'F');
+      // Stars
+      var seed = pg*137+42;
+      for(var i=0;i<50;i++){
+        seed=(seed*1664525+1013904223)&0xffffffff;
+        var sx=Math.abs(seed%450), sy=Math.abs((seed>>8)%666), sr=0.5+Math.abs((seed>>16)%12)/10;
+        var b=0.4+Math.abs((seed>>20)%60)/100;
+        setFill([Math.round(200*b),Math.round(212*b),Math.round(240*b)]);
+        doc.circle(sx,sy,sr,'F');
+      }
+    }
+
+    function drawBorder(){
+      setStroke(GOLD_DK); doc.setLineWidth(1);
+      doc.rect(16,16,W-32,H-32,'S');
+    }
+
+    function drawPgNum(n){
+      doc.setFont('times','italic'); doc.setFontSize(8); setColor(GOLD_DK);
+      doc.text('\u2014 '+n+' \u2014',CX,27,{align:'center'});
+    }
+
+    function drawRule(y,w,col){
+      w=w||0.5; col=col||GOLD_DK;
+      setStroke(col); doc.setLineWidth(0.4);
+      var pad=(1-w)*TW/2;
+      doc.line(ML+pad,y,ML+TW-pad,y);
+    }
+
+    function drawEyebrow(t,y,col){ doc.setFont('times','normal'); doc.setFontSize(7); setColor(col||GOLD_DK); doc.text(t,CX,y,{align:'center'}); }
+    function drawHeading(t,y,s,col){ doc.setFont('times','italic'); doc.setFontSize(s||22); setColor(col||GOLD_LT); doc.text(t,CX,y,{align:'center'}); }
+    function drawSubhead(t,y,col){ doc.setFont('times','italic'); doc.setFontSize(10); setColor(col||GOLD); doc.text(t,CX,y,{align:'center'}); }
+    function drawLabel(t,y,col){ doc.setFont('times','normal'); doc.setFontSize(8); setColor(col||GOLD); doc.text(t,CX,y,{align:'center'}); }
+
+    function pageHeader(ch,title,sub,size,col){
+      drawEyebrow(ch,H-MT-7,GOLD_DK);
+      drawHeading(title,H-MT-30,size||20,col||GOLD_LT);
+      drawSubhead(sub,H-MT-48,GOLD);
+      drawRule(H-MT-56,0.5,GOLD_DK);
+      return H-MT-56-30;
+    }
+
+    function contHeader(ch){
+      drawEyebrow(ch+' \u00b7 CONTINUED',H-MT-11,GOLD_DK);
+      drawRule(H-MT-18,0.5,GOLD_DK);
+      return H-MT-18-25;
+    }
+
+    function flowBody(lines,y,size,lead){
+      size=size||12; lead=lead||19;
+      doc.setFont('times','normal'); doc.setFontSize(size); setColor(CREAM);
+      for(var i=0;i<lines.length;i++){
+        var line=lines[i];
+        if(!line){ y-=lead*0.7; continue; }
+        // word wrap
+        var words=line.split(' '), cur='';
+        for(var j=0;j<words.length;j++){
+          var test=cur+(cur?' ':'')+words[j];
+          var tw=doc.getStringUnitWidth(test)*size/doc.internal.scaleFactor;
+          if(tw>TW && cur){ doc.text(cur,ML,y); y-=lead; cur=words[j]; }
+          else cur=test;
+        }
+        if(cur){ doc.text(cur,ML,y); y-=lead; }
+      }
+      return y;
+    }
+
+    function parseTextToLines(text){
+      // Strip HTML tags and split into paragraphs
+      var clean=text.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+      var paras=clean.split(/\n\n+/);
+      var lines=[];
+      paras.forEach(function(p){
+        p=p.trim();
+        if(!p) return;
+        // Split long paragraphs into word-wrapped lines
+        var words=p.split(' '), cur='';
+        words.forEach(function(w){
+          var test=cur+(cur?' ':'')+w;
+          var tw=doc.getStringUnitWidth(test)*12/doc.internal.scaleFactor;
+          if(tw>TW && cur){ lines.push(cur); cur=w; }
+          else cur=test;
+        });
+        if(cur) lines.push(cur);
+        lines.push(''); // paragraph break
+      });
+      return lines;
+    }
+
+    function newPage(){
+      if(pg>0) doc.addPage();
+      pg++;
+      drawBg(); drawBorder();
+    }
+
+    // ── TITLE PAGE ──
+    newPage();
+    drawEyebrow('C O S M I C   C O N C E P T I O N',H*0.82,GOLD_DK);
+    drawHeading(d.planName||'The Personal Book',H*0.72,26,accent);
+    drawRule(H*0.66,0.4);
+    doc.setFont('times','italic'); doc.setFontSize(16); setColor(CREAM);
+    var titleName = d.partnerName ? d.name+' & '+d.partnerName : d.name;
+    doc.text(titleName,CX,H*0.58,{align:'center'});
+    doc.setFont('times','italic'); doc.setFontSize(10); setColor(GOLD);
+    var signLine = d.sign + (d.cusp ? ' \u00b7 '+d.cuspLabel+' \u00b7 Cuspian' : '');
+    doc.text(signLine,CX,H*0.52,{align:'center'});
+    doc.setFontSize(9); setColor(GOLD_DK);
+    var details = [d.dob,d.tob,d.city,d.country].filter(Boolean).join(' \u00b7 ');
+    doc.text(details,CX,H*0.47,{align:'center'});
+    drawRule(H*0.42,0.3);
+    doc.setFont('times','italic'); doc.setFontSize(10); setColor(CREAM);
+    var taglines=['You were not born by chance.','This book is yours.','Read it when you forget who you are.'];
+    taglines.forEach(function(l,i){ doc.text(l,CX,H*0.36-i*18,{align:'center'}); });
+    doc.setFont('times','normal'); doc.setFontSize(7); setColor(GOLD_DK);
+    doc.text('cosmicconception.com',CX,H*0.1,{align:'center'});
+
+    // ── ORDER INFO PAGE ──
+    newPage(); drawPgNum(pg);
+    drawEyebrow('ORDER INFORMATION',H-MT-7,GOLD_DK);
+    drawHeading('Book Order Details',H-MT-30,18,accent);
+    drawRule(H-MT-46,0.5,GOLD_DK);
+    var y=H-MT-70;
+    var orderLines=[
+      ['Customer', d.name],['Book Type', d.planName||''],
+      ['Sign', signLine],['Life Path', d.lifePath||''],
+      ['Date of Birth', d.dob||''],['Birth Time', d.tob||''],
+      ['City', d.city||''],
+      ['Partner/Friend', d.partnerName||'N/A'],
+      ['Copies', String(d.copies||1)],['Order Date', d.orderDate||''],
+      ['',''],['SHIP TO',''],
+      ['Name', d.shipName||''],
+      ['Street', d.shipStreet||''],
+      ['City/State/Zip', [d.shipCity,d.shipState,d.shipZip].filter(Boolean).join(', ')],
+      ['Country', d.shipCountry||''],['Phone', d.shipPhone||''],
+    ];
+    orderLines.forEach(function(row){
+      if(!row[0]){ y-=8; return; }
+      doc.setFont('times','normal'); doc.setFontSize(8); setColor(GOLD_DK);
+      doc.text(row[0]+':',ML,y);
+      doc.setFont('times','normal'); doc.setFontSize(10); setColor(CREAM);
+      doc.text(row[1],ML+100,y);
+      y-=18;
+    });
+
+    // ── READING CONTENT ──
+    var readingText = d.readingText || '';
+    // Strip HTML, split into sections
+    var sectionReg = /<h2[^>]*>(.*?)<\/h2>([\s\S]*?)(?=<h2|$)/gi;
+    var match, sections=[];
+    var tempText = readingText;
+
+    while((match=sectionReg.exec(tempText))!==null){
+      var secTitle = match[1].replace(/<[^>]+>/g,'').trim();
+      var secBody = match[2].replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+      sections.push({title:secTitle, body:secBody});
+    }
+
+    if(sections.length===0 && readingText){
+      // No h2 sections found — just flow all text
+      sections=[{title:'Your Reading', body:readingText.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()}];
+    }
+
+    for(var si=0;si<sections.length;si++){
+      var sec = sections[si];
+      var lines = parseTextToLines(sec.body);
+
+      // Chapter title page
+      newPage(); drawPgNum(pg);
+      drawEyebrow('CHAPTER '+(si+1),H*0.72,GOLD_DK);
+      doc.setFont('times','italic'); doc.setFontSize(24); setColor(accent);
+      // Wrap title if too long
+      var titleW = doc.getStringUnitWidth(sec.title)*24/doc.internal.scaleFactor;
+      if(titleW > TW){
+        var tw = sec.title.split(' ');
+        var mid = Math.floor(tw.length/2);
+        doc.text(tw.slice(0,mid).join(' '),CX,H*0.60,{align:'center'});
+        doc.text(tw.slice(mid).join(' '),CX,H*0.52,{align:'center'});
+      } else {
+        doc.text(sec.title,CX,H*0.60,{align:'center'});
+      }
+      doc.setFont('times','italic'); doc.setFontSize(10); setColor(GOLD);
+      doc.text(signLine,CX,H*0.46,{align:'center'});
+
+      // Content pages
+      var lineIdx=0, firstPage=true;
+      while(lineIdx<lines.length){
+        newPage(); drawPgNum(pg);
+        var cy;
+        if(firstPage){
+          cy = pageHeader('CHAPTER '+(si+1), sec.title, signLine, 18, accent);
+          firstPage=false;
+        } else {
+          cy = contHeader('CHAPTER '+(si+1));
+        }
+        doc.setFont('times','normal'); doc.setFontSize(12); setColor(CREAM);
+        while(lineIdx<lines.length && cy>MB+30){
+          var l=lines[lineIdx];
+          if(!l){ cy-=13; }
+          else { doc.text(l,ML,cy); cy-=19; }
+          lineIdx++;
+        }
+      }
+    }
+
+    // ── CLOSING PAGE ──
+    newPage();
+    drawHeading('You were not born by chance.',H*0.78,20,GOLD_LT);
+    drawRule(H*0.73,0.4);
+    var cy2=H*0.66;
+    var closingLines=['Every gift you carry, every depth you feel,',
+      'every question that has followed you through this life \u2014',
+      'none of it was random.','',
+      'You were conceived with intention, by something greater',
+      'than chance, and the stars on the morning you arrived',
+      'simply confirmed what was already written into you.',
+      '','This book belongs to you.',
+      'Read it when you forget who you are.'];
+    closingLines.forEach(function(l){
+      doc.setFont('times','italic'); doc.setFontSize(11); setColor(CREAM);
+      doc.text(l,CX,cy2,{align:'center'}); cy2-=16;
+    });
+    doc.setFont('times','italic'); doc.setFontSize(12); setColor(GOLD_LT);
+    doc.text('Cosmic Conception',CX,H*0.12,{align:'center'});
+    doc.setFont('times','normal'); doc.setFontSize(7); setColor(GOLD_DK);
+    doc.text('cosmicconception.com',CX,H*0.09,{align:'center'});
+
+    // ── SAVE ──
+    var filename = (d.name||'customer').replace(/\s+/g,'_')+'_'+
+                   (d.plan||'book').replace('book_','')+'_book.pdf';
+    doc.save(filename);
+
+    btn.textContent = '✓ BOOK PDF DOWNLOADED';
+    status.textContent = 'Upload '+filename+' to Lulu to print and ship!';
+    setTimeout(function(){ btn.disabled=false; btn.textContent='📖 GENERATE BOOK PDF'; },4000);
+
+  } catch(err){
+    console.error('Book PDF error:',err);
+    alert('Error generating PDF: '+err.message+'\n\nPlease try again.');
+    btn.disabled=false; btn.textContent='📖 GENERATE BOOK PDF';
+    status.style.display='none';
+  }
+}
+
+async function testAPI(){
+  var btn = event.target;
+  btn.textContent = 'testing...';
+  try {
+    var res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':'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',
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:30,messages:[{role:'user',content:'Say hello in 5 words.'}]})
+    });
+    var data = await res.json();
+    if(data.content && data.content[0]){
+      alert('SUCCESS: ' + data.content[0].text);
+    } else {
+      alert('ERROR: ' + JSON.stringify(data));
+    }
+  } catch(err){
+    alert('FAILED: ' + err.message);
+  }
+  btn.textContent = 'test connection';
+}
+
+function doShare(){
+  var name=document.getElementById('r-name').textContent;
+  if(navigator.share) navigator.share({title:name+"'s Cosmic Conception",text:'I just received my complete cosmic biography. Discover yours at Cosmic Conception.',url:window.location.href});
+  else navigator.clipboard.writeText(window.location.href).then(function(){alert('Link copied!');});
+}
+</script>
+</body>
+</html>
